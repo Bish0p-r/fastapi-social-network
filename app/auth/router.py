@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, Response, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.auth.services import get_hash_password, verify_password, create_access_token
-from app.users.dependencies import users_service
+from app.auth.services import get_hash_password, verify_password, create_access_token, email_token_verification
+from app.users.dependencies import users_service, GetUsersService
 from app.users.services import UserServices
 from app.utils.dependencies import ActiveAsyncSession
-from app.utils.exceptions import UserAlreadyExists, IncorrectEmailOrPassword
+from app.utils.exceptions import UserAlreadyExists, IncorrectEmailOrPassword, UserIsNotActiveException
 from app.auth.schemas import UserRegisterSchema, UserLoginSchema, AccessToken
 from app.users.repository import UserRepository
 
@@ -32,6 +32,10 @@ async def register(user_data: UserRegisterSchema, user_services: UserServices = 
         last_name=user_data.last_name,
     )
 
+    email_verif_token = create_access_token(data={"sub": user_data.email, "type": "email-verif"}, expire_in=60)
+
+    print(email_verif_token)
+
     return Response(status_code=status.HTTP_201_CREATED, content="User created")
 
 
@@ -46,7 +50,10 @@ async def login(
     if not user or not verify_password(user_data.password, user.hashed_password):
         raise IncorrectEmailOrPassword
 
-    access_token = create_access_token(data={"sub": str(user.id)})
+    # if not user.is_active:
+    #     raise UserIsNotActiveException
+
+    access_token = create_access_token(data={"sub": str(user.id), "type": "access-token"})
     response.set_cookie("booking_access_token", access_token, httponly=True)
 
     return AccessToken(access_token=access_token)
@@ -56,3 +63,7 @@ async def login(
 async def logout(response: Response):
     response.delete_cookie("booking_access_token")
 
+
+@router.get("/verify-email/{token}")
+async def verify_email(token: str, user_services: UserServices = GetUsersService):
+    return await email_token_verification(token, user_services)

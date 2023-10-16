@@ -37,3 +37,8 @@ class IncorrectTokenException(AuthException):
 class TokenAbsentException(AuthException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = "Token absent"
+
+
+class UserIsNotActiveException(AuthException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    detail = "User is not active"

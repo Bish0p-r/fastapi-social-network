@@ -1,5 +1,5 @@
 from fastapi import Depends
-from sqlalchemy import select, insert, delete
+from sqlalchemy import select, insert, delete, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utils.dependencies import ActiveAsyncSession
 from app.database import get_async_session, async_session_maker
@@ -36,4 +36,10 @@ class BaseRepository:
         async with async_session_maker() as session:
             user_booked_rooms = delete(self.model).filter_by(**filter_by)
             await session.execute(user_booked_rooms)
+            await session.commit()
+
+    async def update(self, model_id: int, **data):
+        async with async_session_maker() as session:
+            query = update(self.model).values(**data).filter_by(id=model_id)
+            await session.execute(query)
             await session.commit()

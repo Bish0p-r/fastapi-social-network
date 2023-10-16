@@ -6,5 +6,6 @@ class UserProfileSchema(BaseModel):
     email: str
     first_name: str
     last_name: str
-    age: int
-    bio: str
+
+    class Config:
+        from_attributes = True

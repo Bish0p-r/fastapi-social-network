@@ -18,7 +18,8 @@ class Users(Base):
     is_superuser = Column(Boolean, default=False)
     is_active = Column(Boolean, default=False)
 
-    friendships = relationship('Friendships', back_populates='users')
+    incoming_requests = relationship('Friendships', foreign_keys="[Friendships.to_user]")
+    outgoing_requests = relationship('Friendships', foreign_keys="[Friendships.from_user]")
     profile = relationship('UserProfile', back_populates='user')
 
 
@@ -31,7 +32,16 @@ class Friendships(Base):
 
     is_accepted = Column(Boolean, default=False)
 
-    users = relationship('Users', back_populates='friendships')
+    incoming_requests = relationship(
+        'Users',
+        foreign_keys="[Friendships.to_user]",
+        back_populates='incoming_requests'
+    )
+    outgoing_requests = relationship(
+        'Users',
+        foreign_keys="[Friendships.from_user]",
+        back_populates='outgoing_requests'
+    )
 
 
 class PrivacySettingsEnum(Enum):

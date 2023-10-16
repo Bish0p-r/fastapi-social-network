@@ -1,16 +1,16 @@
 from datetime import datetime, timedelta
 
 from fastapi import Depends
-from jose import jwt
+from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.users.dependencies import users_service
+from app.users.dependencies import GetUsersService
 from app.users.services import UserServices
 from app.utils.dependencies import ActiveAsyncSession
 from app.users.repository import UserRepository
 from app.config import settings
-
+from app.utils.exceptions import IncorrectTokenException, TokenExpiredException, UserIsNotPresentException
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -23,18 +23,44 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def create_access_token(data: dict) -> str:
+def create_access_token(data: dict, expire_in: int = 15) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=15)
+    expire = datetime.utcnow() + timedelta(minutes=expire_in)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded_jwt
 
 
-async def authenticate_user(email: str, password: str, user_services: UserServices = Depends(users_service)):
-    # user = await UserRepository.find_one_or_none(email=email)
+async def authenticate_user(email: str, password: str, user_services: UserServices = GetUsersService):
     user = await user_services.get_user_by_email(email)
 
     if not (user and verify_password(password, user.hashed_password)):
         return None
     return user
+
+
+async def email_token_verification(token: str, user_services: UserServices = GetUsersService):
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+    except JWTError:
+        raise IncorrectTokenException
+
+    expire: str = payload.get("exp")
+
+    if not expire or int(expire) < datetime.utcnow().timestamp():
+        raise TokenExpiredException
+
+    user_email: str = payload.get("sub")
+    token_type: str = payload.get("type")
+
+    if not token_type or not user_email or token_type != "email-verif":
+        raise IncorrectTokenException
+
+    await user_services.activate_user(user_email)
+
+    # activated_user = await user_services.activate_user(user_email)
+    #
+    # if not activated_user:
+    #     raise UserIsNotPresentException
+    #
+    # return activated_user

@@ -20,3 +20,6 @@ class UserServices:
 
     async def create_user(self, **user_data):
         return await self.user_repository.add(**user_data)
+
+    async def activate_user(self, user_email):
+        return await self.user_repository.update_by_email(user_email, is_active=True)
