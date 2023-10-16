@@ -1,4 +1,4 @@
-from app.common.repository import BaseRepository
+from app.utils.repository import BaseRepository
 from app.users.models import Users
 
 

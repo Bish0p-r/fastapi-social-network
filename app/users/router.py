@@ -1,4 +1,10 @@
-from fastapi import APIRouter
+from typing import Annotated
+from fastapi import APIRouter, Depends
+
+from app.users.services import UserServices
+from app.users.schemas import UserProfileSchema
+from app.users.dependencies import users_service
+from app.auth.dependencies import get_current_user
 
 
 router = APIRouter(
@@ -7,6 +13,12 @@ router = APIRouter(
 )
 
 
-@router.post("/me")
-async def me():
-    pass
+@router.get("/me")
+async def me(user=Depends(get_current_user), user_services: UserServices = Depends(users_service)):
+    return await user_services.get_user_by_email(user.email)
+
+
+@router.get("/test")
+async def test(user_services: UserServices = Depends(users_service)):
+    r = await user_services.list_users()
+    return r

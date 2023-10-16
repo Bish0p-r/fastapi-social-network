@@ -1,0 +1,22 @@
+from fastapi import Depends
+
+from app.database import get_async_session
+from app.users.repository import UserRepository
+from app.utils.dependencies import ActiveAsyncSession
+
+
+class UserServices:
+    def __init__(self, user_repository: type[UserRepository]):
+        self.user_repository: UserRepository = user_repository()
+
+    async def list_users(self):
+        return await self.user_repository.find_all()
+
+    async def get_user_by_id(self, user_id):
+        return await self.user_repository.find_one_or_none(id=user_id)
+
+    async def get_user_by_email(self, user_email):
+        return await self.user_repository.find_one_or_none(email=user_email)
+
+    async def create_user(self, **user_data):
+        return await self.user_repository.add(**user_data)

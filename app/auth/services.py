@@ -1,10 +1,13 @@
 from datetime import datetime, timedelta
 
+from fastapi import Depends
 from jose import jwt
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.common.dependencies import ActiveAsyncSession
+from app.users.dependencies import users_service
+from app.users.services import UserServices
+from app.utils.dependencies import ActiveAsyncSession
 from app.users.repository import UserRepository
 from app.config import settings
 
@@ -28,8 +31,10 @@ def create_access_token(data: dict) -> str:
     return encoded_jwt
 
 
-async def authenticate_user(email: str, password: str, session: AsyncSession = ActiveAsyncSession):
-    user = await UserRepository.find_one_or_none(session, email=email)
+async def authenticate_user(email: str, password: str, user_services: UserServices = Depends(users_service)):
+    # user = await UserRepository.find_one_or_none(email=email)
+    user = await user_services.get_user_by_email(email)
+
     if not (user and verify_password(password, user.hashed_password)):
         return None
     return user

@@ -15,6 +15,12 @@ class UserRegisterSchema(UserLoginSchema):
     def check_passwords_match(self):
         pw1 = self.password
         pw2 = self.confirm_password
+
         if pw1 is not None and pw2 is not None and pw1 != pw2:
             raise ValueError('passwords do not match')
         return self
+
+
+class AccessToken(BaseModel):
+    access_token: str
+    token_type: str = 'bearer'
