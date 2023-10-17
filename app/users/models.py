@@ -20,7 +20,7 @@ class Users(Base):
 
     incoming_requests = relationship('Friendships', foreign_keys="[Friendships.to_user]")
     outgoing_requests = relationship('Friendships', foreign_keys="[Friendships.from_user]")
-    profile = relationship('UserProfile', back_populates='user')
+    profile = relationship('UserProfile', uselist=False, back_populates='user')
 
 
 class Friendships(Base):
@@ -54,11 +54,11 @@ class UserProfile(Base):
     __tablename__ = 'user_profile'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
+    user_id = Column(Integer, ForeignKey('users.id'), unique=True)
     date_of_birth = Column(Date)
     bio = Column(String)
 
-    privacy_settings = Column(EnumField(PrivacySettingsEnum), default=PrivacySettingsEnum.PUBLIC.value)
+    privacy_settings = Column(EnumField(PrivacySettingsEnum), default=PrivacySettingsEnum.PUBLIC)
 
     user = relationship('Users', back_populates='profile')
 

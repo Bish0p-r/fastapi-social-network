@@ -5,8 +5,8 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.users.dependencies import GetUsersService
-from app.users.services import UserServices
+from app.users.dependencies import GetUsersService, GetProfileService
+from app.users.services import UserServices, UserProfileService
 from app.utils.dependencies import ActiveAsyncSession
 from app.users.repository import UserRepository
 from app.config import settings
@@ -31,7 +31,11 @@ def create_access_token(data: dict, expire_in: int = 15) -> str:
     return encoded_jwt
 
 
-async def authenticate_user(email: str, password: str, user_services: UserServices = GetUsersService):
+async def authenticate_user(
+        email: str,
+        password: str,
+        user_services: UserServices = GetUsersService,
+):
     user = await user_services.get_user_by_email(email)
 
     if not (user and verify_password(password, user.hashed_password)):
@@ -39,7 +43,11 @@ async def authenticate_user(email: str, password: str, user_services: UserServic
     return user
 
 
-async def email_token_verification(token: str, user_services: UserServices = GetUsersService):
+async def email_token_verification(
+        token: str,
+        user_services: UserServices = GetUsersService,
+        profile_services: UserProfileService = GetProfileService
+):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
     except JWTError:
@@ -56,11 +64,12 @@ async def email_token_verification(token: str, user_services: UserServices = Get
     if not token_type or not user_email or token_type != "email-verif":
         raise IncorrectTokenException
 
-    await user_services.activate_user(user_email)
+    user = await user_services.activate_user(user_email)
+    user_id = user.Users.id
 
-    # activated_user = await user_services.activate_user(user_email)
-    #
-    # if not activated_user:
-    #     raise UserIsNotPresentException
-    #
-    # return activated_user
+    if not user_id:
+        raise UserIsNotPresentException
+
+    await profile_services.create_user_profile(user_id)
+
+    return user

@@ -24,3 +24,19 @@ class UserRegisterSchema(UserLoginSchema):
 class AccessToken(BaseModel):
     access_token: str
     token_type: str = 'bearer'
+
+
+class EmailSchema(BaseModel):
+    email: EmailStr
+
+
+class UserSchema(BaseModel):
+    id: int
+    email: EmailStr
+    first_name: str
+    last_name: str
+    is_active: bool
+
+
+class UserMappingSchema(BaseModel):
+    Users: UserSchema

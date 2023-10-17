@@ -1,7 +1,7 @@
 from sqlalchemy import update
 
 from app.utils.repository import BaseRepository
-from app.users.models import Users
+from app.users.models import Users, UserProfile
 from app.database import async_session_maker
 
 
@@ -10,6 +10,11 @@ class UserRepository(BaseRepository):
 
     async def update_by_email(self, email: str, **data):
         async with async_session_maker() as session:
-            query = update(self.model).values(**data).filter_by(email=email)
-            await session.execute(query)
+            query = update(self.model).values(**data).filter_by(email=email).returning(self.model)
+            result = await session.execute(query)
             await session.commit()
+            return result.mappings().one_or_none()
+
+
+class UserProfileRepository(BaseRepository):
+    model = UserProfile
