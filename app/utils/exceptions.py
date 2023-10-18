@@ -42,3 +42,23 @@ class TokenAbsentException(AuthException):
 class UserIsNotActiveException(AuthException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = "User is not active"
+
+
+class FriendShipException(HTTPException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = ""
+
+    def __init__(self):
+        super().__init__(status_code=self.status_code, detail=self.detail)
+
+
+class FriendShipAlreadyExists(FriendShipException):
+    detail = "Friendship already exists"
+
+
+class FriendShipRequestAlreadyExists(FriendShipException):
+    detail = "Friendship request already exists"
+
+
+class FriendShipCannotBeSentToYourself(FriendShipException):
+    detail = "Friendship cannot be sent to yourself"

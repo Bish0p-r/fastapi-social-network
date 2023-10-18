@@ -17,3 +17,14 @@ class UserSchema(BaseModel):
 
 class UserMappingSchema(BaseModel):
     Users: UserSchema
+
+
+class FriendshipSchema(BaseModel):
+    id: int
+    to_user: int
+    from_user: int
+    is_accepted: bool
+
+
+class MappingFriendShipSchema(BaseModel):
+    Friendships: FriendshipSchema

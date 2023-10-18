@@ -1,7 +1,7 @@
 from sqlalchemy import update
 
 from app.utils.repository import BaseRepository
-from app.users.models import Users
+from app.users.models import Users, Friendships
 from app.database import async_session_maker
 
 
@@ -14,3 +14,7 @@ class UserRepository(BaseRepository):
             result = await session.execute(query)
             await session.commit()
             return result.mappings().one_or_none()
+
+
+class FriendShipRepository(BaseRepository):
+    model = Friendships
