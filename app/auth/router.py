@@ -9,7 +9,8 @@ from app.users.services import UserServices
 from app.utils.dependencies import ActiveAsyncSession
 from app.utils.exceptions import UserAlreadyExists, IncorrectEmailOrPassword, UserIsNotActiveException, \
     UserIsNotPresentException
-from app.auth.schemas import UserRegisterSchema, UserLoginSchema, AccessToken, EmailSchema, UserMappingSchema
+from app.auth.schemas import UserRegisterSchema, UserLoginSchema, AccessToken, EmailSchema
+from app.users.schemas import UserMappingSchema
 from app.users.repository import UserRepository
 
 

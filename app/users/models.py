@@ -29,7 +29,6 @@ class Users(Base):
 
     incoming_requests = relationship('Friendships', foreign_keys="[Friendships.to_user]")
     outgoing_requests = relationship('Friendships', foreign_keys="[Friendships.from_user]")
-    profile = relationship('UserProfile', uselist=False, back_populates='user')
 
 
 class Friendships(Base):

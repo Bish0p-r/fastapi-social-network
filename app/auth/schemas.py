@@ -7,9 +7,9 @@ class UserLoginSchema(BaseModel):
 
 
 class UserRegisterSchema(UserLoginSchema):
+    confirm_password: str = Field(min_length=8, max_length=50)
     first_name: str = Field(min_length=8, max_length=50)
     last_name: str = Field(min_length=8, max_length=50)
-    confirm_password: str = Field(min_length=8, max_length=50)
 
     @model_validator(mode='after')
     def check_passwords_match(self):
@@ -28,15 +28,3 @@ class AccessToken(BaseModel):
 
 class EmailSchema(BaseModel):
     email: EmailStr
-
-
-class UserSchema(BaseModel):
-    id: int
-    email: EmailStr
-    first_name: str
-    last_name: str
-    is_active: bool
-
-
-class UserMappingSchema(BaseModel):
-    Users: UserSchema

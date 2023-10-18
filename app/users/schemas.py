@@ -1,11 +1,19 @@
-from pydantic import BaseModel
+from datetime import date
+from enum import Enum
+from pydantic import BaseModel, EmailStr
+from app.users.models import PrivacySettingsEnum
 
 
-class UserProfileSchema(BaseModel):
+class UserSchema(BaseModel):
     id: int
-    email: str
+    email: EmailStr
     first_name: str
     last_name: str
+    privacy_settings: PrivacySettingsEnum
+    date_of_birth: date | None
+    bio: str | None
+    is_active: bool
 
-    class Config:
-        from_attributes = True
+
+class UserMappingSchema(BaseModel):
+    Users: UserSchema
