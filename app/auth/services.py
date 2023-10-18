@@ -5,8 +5,8 @@ from jose import jwt, JWTError
 from passlib.context import CryptContext
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.users.dependencies import GetUsersService, GetProfileService
-from app.users.services import UserServices, UserProfileService
+from app.users.dependencies import GetUsersService
+from app.users.services import UserServices
 from app.utils.dependencies import ActiveAsyncSession
 from app.users.repository import UserRepository
 from app.config import settings
@@ -45,8 +45,7 @@ async def authenticate_user(
 
 async def email_token_verification(
         token: str,
-        user_services: UserServices = GetUsersService,
-        profile_services: UserProfileService = GetProfileService
+        user_services: UserServices = GetUsersService
 ):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
@@ -65,11 +64,7 @@ async def email_token_verification(
         raise IncorrectTokenException
 
     user = await user_services.activate_user(user_email)
-    user_id = user.Users.id
 
-    if not user_id:
+    if not user:
         raise UserIsNotPresentException
-
-    await profile_services.create_user_profile(user_id)
-
     return user

@@ -4,8 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import EmailStr
 
 from app.auth.services import get_hash_password, verify_password, create_access_token, email_token_verification
-from app.users.dependencies import users_service, GetUsersService, GetProfileService
-from app.users.services import UserServices, UserProfileService
+from app.users.dependencies import users_service, GetUsersService
+from app.users.services import UserServices
 from app.utils.dependencies import ActiveAsyncSession
 from app.utils.exceptions import UserAlreadyExists, IncorrectEmailOrPassword, UserIsNotActiveException, \
     UserIsNotPresentException
@@ -71,10 +71,9 @@ async def logout(response: Response):
 @router.get("/verify-email/{token}")
 async def verify_email(
         token: str,
-        user_services: UserServices = GetUsersService,
-        profile_services: UserProfileService = GetProfileService
+        user_services: UserServices = GetUsersService
 ) -> UserMappingSchema:
-    return await email_token_verification(token, user_services, profile_services)
+    return await email_token_verification(token, user_services)
 
 
 @router.post("/resend-email-verification")
