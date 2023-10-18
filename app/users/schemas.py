@@ -28,3 +28,7 @@ class FriendshipSchema(BaseModel):
 
 class MappingFriendShipSchema(BaseModel):
     Friendships: FriendshipSchema
+
+
+class FriendShipRequestSchema(BaseModel):
+    to_user: int
