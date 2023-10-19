@@ -62,3 +62,7 @@ class FriendShipRequestAlreadyExists(FriendShipException):
 
 class FriendShipCannotBeSentToYourself(FriendShipException):
     detail = "Friendship cannot be sent to yourself"
+
+
+class IncorrectUserIdException(FriendShipException):
+    detail = "User with this id does not exist"

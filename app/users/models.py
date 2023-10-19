@@ -4,6 +4,7 @@ from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Date, Enum 
 from sqlalchemy.orm import relationship
 
 from app.database import Base
+from app.blacklist.models import Blacklist
 
 
 class PrivacySettingsEnum(Enum):
@@ -32,45 +33,3 @@ class Users(Base):
 
     my_blacklist = relationship('Blacklist', foreign_keys="[Blacklist.initiator_user]")
     im_blacklisted = relationship('Blacklist', foreign_keys="[Blacklist.blocked_user]")
-
-
-class Friendships(Base):
-    __tablename__ = 'friendships'
-    __table_args__ = (UniqueConstraint('to_user', 'from_user'),)
-
-    id = Column(Integer, primary_key=True)
-    to_user = Column(Integer, ForeignKey('users.id'))
-    from_user = Column(Integer, ForeignKey('users.id'))
-
-    is_accepted = Column(Boolean, default=False)
-
-    incoming_requests = relationship(
-        'Users',
-        foreign_keys="[Friendships.to_user]",
-        back_populates='incoming_requests'
-    )
-    outgoing_requests = relationship(
-        'Users',
-        foreign_keys="[Friendships.from_user]",
-        back_populates='outgoing_requests'
-    )
-
-
-class Blacklist(Base):
-    __tablename__ = 'blacklist'
-    __table_args__ = (UniqueConstraint('initiator_user', 'blocked_user'),)
-
-    id = Column(Integer, primary_key=True)
-    initiator_user = Column(Integer, ForeignKey('users.id'))
-    blocked_user = Column(Integer, ForeignKey('users.id'))
-
-    my_blacklist = relationship(
-        'Users',
-        foreign_keys="[Blacklist.initiator_user]",
-        back_populates='my_blacklist'
-    )
-    im_blacklisted = relationship(
-        'Users',
-        foreign_keys="[Blacklist.blocked_user]",
-        back_populates='im_blacklisted'
-    )
