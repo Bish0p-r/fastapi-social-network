@@ -4,7 +4,8 @@ from sqlalchemy.exc import IntegrityError
 from app.database import get_async_session
 from app.users.repository import UserRepository, FriendShipRepository
 from app.utils.dependencies import ActiveAsyncSession
-from app.utils.exceptions import FriendShipAlreadyExists, FriendShipRequestAlreadyExists
+from app.utils.exceptions import FriendShipAlreadyExists, FriendShipRequestAlreadyExists, \
+    FriendShipCannotBeSentToYourself
 
 
 class UserServices:
@@ -32,6 +33,9 @@ class FriendShipServices:
         self.friendship_repository: FriendShipRepository = friendship_repository()
 
     async def send_friend_request(self, from_user_id, to_user_id):
+        if from_user_id == to_user_id:
+            raise FriendShipCannotBeSentToYourself
+
         existing_friendship = await self.friendship_repository.find_one_or_none(
             from_user=to_user_id,
             to_user=from_user_id

@@ -20,23 +20,21 @@ async def me(user=Depends(get_current_user), user_services: UserServices = GetUs
     return await user_services.get_user_by_id(user.id)
 
 
-@router.get("/users")
+@router.get("")
 async def get_list_of_users(user_services: UserServices = GetUsersService) -> List[UserSchema]:
     return await user_services.list_users()
 
 
-@router.post("/users/send-friend-request")
+@router.post("/send-friend-request")
 async def send_friend_request(
         user_data: FriendShipRequestSchema,
         user=Depends(get_current_user),
         friendship_services: FriendShipServices = GetFriendShipService
 ) -> MappingFriendShipSchema:
-    if user.id == user_data.to_user:
-        raise FriendShipCannotBeSentToYourself
     return await friendship_services.send_friend_request(from_user_id=user.id, to_user_id=user_data.to_user)
 
 
-@router.post("/users/cancel-sent-friend-request")
+@router.post("/cancel-sent-friend-request")
 async def cancel_sent_friend_request(
         user_data: FriendShipRequestSchema,
         user=Depends(get_current_user),
@@ -46,7 +44,7 @@ async def cancel_sent_friend_request(
     return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, content={"message": "Friendship request canceled"})
 
 
-@router.post("/users/accept-friend-request")
+@router.post("/accept-friend-request")
 async def accept_friend_request(
         user_data: FriendShipRequestSchema,
         user=Depends(get_current_user),
@@ -55,7 +53,7 @@ async def accept_friend_request(
     return await friendship_services.accept_friend_request(from_user_id=user_data.to_user, to_user_id=user.id)
 
 
-@router.post("/users/reject-friend-request")
+@router.post("/reject-friend-request")
 async def reject_friend_request(
         user_data: FriendShipRequestSchema,
         user=Depends(get_current_user),
@@ -65,7 +63,7 @@ async def reject_friend_request(
     return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, content={"message": "Friendship request rejected"})
 
 
-@router.get("/users/me/friendships")
+@router.get("/me/friendships")
 async def get_my_friendships(
         user=Depends(get_current_user),
         friendship_services: FriendShipServices = GetFriendShipService
