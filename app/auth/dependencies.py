@@ -49,3 +49,6 @@ async def get_current_user(token: str = Depends(get_token), user_services: UserS
         raise UserIsNotPresentException
 
     return user
+
+
+GetCurrentUser = Depends(get_current_user)

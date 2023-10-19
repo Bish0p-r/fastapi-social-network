@@ -66,3 +66,15 @@ class FriendShipCannotBeSentToYourself(FriendShipException):
 
 class IncorrectUserIdException(FriendShipException):
     detail = "User with this id does not exist"
+
+
+class BlackListException(HTTPException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = ""
+
+    def __init__(self):
+        super().__init__(status_code=self.status_code, detail=self.detail)
+
+
+class UserAlreadyInBlackListException(BlackListException):
+    detail = "User is already in blacklist"
