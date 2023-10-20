@@ -33,3 +33,5 @@ class Users(Base):
 
     my_blacklist = relationship('Blacklist', foreign_keys="[Blacklist.initiator_user]")
     im_blacklisted = relationship('Blacklist', foreign_keys="[Blacklist.blocked_user]")
+
+    posts = relationship('Posts', back_populates='author')
