@@ -1,4 +1,6 @@
-from sqlalchemy import Column, String, Integer, ForeignKey
+from datetime import datetime
+
+from sqlalchemy import Column, String, Integer, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -11,5 +13,7 @@ class Posts(Base):
     title = Column(String)
     content = Column(String, nullable=False)
     author_id = Column(Integer, ForeignKey('users.id'))
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     author = relationship('Users', back_populates='posts')
