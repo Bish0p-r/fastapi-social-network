@@ -1,4 +1,4 @@
-from sqlalchemy import update, select, or_
+from sqlalchemy import update, select, or_, delete, and_
 
 from app.utils.repository import BaseRepository
 from app.friendships.models import Friendships
@@ -30,3 +30,15 @@ class FriendShipRepository(BaseRepository):
             ).except_(user_q)
             result = await session.execute(query)
             return result.mappings().all()
+
+    async def delete_accepted_friend_request(self, user1_id: int, user2_id: int):
+        async with async_session_maker() as session:
+            query = delete(self.model).filter(
+                or_(
+                    and_(self.model.from_user == user1_id, self.model.to_user == user2_id),
+                    and_(self.model.to_user == user1_id, self.model.from_user == user2_id)
+                ),
+                self.model.is_accepted == True
+            )
+            await session.execute(query)
+            await session.commit()

@@ -13,4 +13,4 @@ class MappingFriendShipSchema(BaseModel):
 
 
 class FriendShipRequestSchema(BaseModel):
-    to_user: int
+    user_id: int

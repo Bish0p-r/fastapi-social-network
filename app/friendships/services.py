@@ -1,3 +1,4 @@
+from sqlalchemy import or_, and_
 from sqlalchemy.exc import IntegrityError
 from asyncpg.exceptions import UniqueViolationError, ForeignKeyViolationError
 
@@ -36,6 +37,9 @@ class FriendShipServices:
 
     async def cancel_sent_friend_request(self, from_user_id, to_user_id):
         await self.friendship_repository.delete(from_user=from_user_id, to_user=to_user_id, is_accepted=False)
+
+    async def delete_accepted_friend_request(self, from_user_id, to_user_id):
+        await self.friendship_repository.delete_accepted_friend_request(user1_id=from_user_id, user2_id=to_user_id)
 
     async def accept_friend_request(self, from_user_id, to_user_id):
         return await self.friendship_repository.update_by_users_id(

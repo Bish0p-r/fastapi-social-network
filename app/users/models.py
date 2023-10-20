@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 
 from app.database import Base
 from app.blacklist.models import Blacklist
+from app.posts.models import Posts
 
 
 class PrivacySettingsEnum(Enum):

@@ -15,9 +15,12 @@ router = APIRouter(
 )
 
 
-@router.get("")
-async def test():
-    pass
+@router.get("/me/friendships")
+async def get_my_friendships(
+        user=GetCurrentUser,
+        friendship_services: FriendShipServices = GetFriendShipService
+) -> List[UserSchema]:
+    return await friendship_services.get_list_of_friendships(user.id)
 
 
 @router.post("/send-friend-request")
@@ -26,17 +29,7 @@ async def send_friend_request(
         user=GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ) -> MappingFriendShipSchema:
-    return await friendship_services.send_friend_request(from_user_id=user.id, to_user_id=user_data.to_user)
-
-
-@router.post("/cancel-sent-friend-request")
-async def cancel_sent_friend_request(
-        user_data: FriendShipRequestSchema,
-        user=GetCurrentUser,
-        friendship_services: FriendShipServices = GetFriendShipService
-):
-    await friendship_services.cancel_sent_friend_request(from_user_id=user.id, to_user_id=user_data.to_user)
-    return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, content={"message": "Friendship request canceled"})
+    return await friendship_services.send_friend_request(from_user_id=user.id, to_user_id=user_data.user_id)
 
 
 @router.post("/accept-friend-request")
@@ -45,22 +38,34 @@ async def accept_friend_request(
         user=GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ):
-    return await friendship_services.accept_friend_request(from_user_id=user_data.to_user, to_user_id=user.id)
+    return await friendship_services.accept_friend_request(from_user_id=user_data.user_id, to_user_id=user.id)
 
 
-@router.post("/reject-friend-request")
+@router.delete("/reject-friend-request")
 async def reject_friend_request(
         user_data: FriendShipRequestSchema,
         user=GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ):
-    await friendship_services.cancel_sent_friend_request(from_user_id=user_data.to_user, to_user_id=user.id)
-    return JSONResponse(status_code=status.HTTP_204_NO_CONTENT, content={"message": "Friendship request rejected"})
+    await friendship_services.cancel_sent_friend_request(from_user_id=user_data.user_id, to_user_id=user.id)
+    return status.HTTP_204_NO_CONTENT
 
 
-@router.get("/me/friendships")
-async def get_my_friendships(
+@router.delete("/cancel-sent-friend-request")
+async def cancel_sent_friend_request(
+        user_data: FriendShipRequestSchema,
         user=GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
-) -> List[UserSchema]:
-    return await friendship_services.get_list_of_friendships(user.id)
+):
+    await friendship_services.cancel_sent_friend_request(from_user_id=user.id, to_user_id=user_data.user_id)
+    return status.HTTP_204_NO_CONTENT
+
+
+@router.delete("/remove-friend")
+async def remove_friend(
+        user_data: FriendShipRequestSchema,
+        user=GetCurrentUser,
+        friendship_services: FriendShipServices = GetFriendShipService
+):
+    await friendship_services.delete_accepted_friend_request(from_user_id=user.id, to_user_id=user_data.user_id)
+    return status.HTTP_204_NO_CONTENT
