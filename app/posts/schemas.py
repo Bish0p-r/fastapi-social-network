@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -23,3 +24,12 @@ class PostDataResponseSchema(BaseModel):
 
 class MappingPostSchema(BaseModel):
     Posts: PostDataResponseSchema
+
+
+class PostAuthorIDRequestSchema(BaseModel):
+    id: int
+
+
+class PostUpdateRequestSchema(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None

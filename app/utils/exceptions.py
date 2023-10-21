@@ -78,3 +78,19 @@ class BlackListException(HTTPException):
 
 class UserAlreadyInBlackListException(BlackListException):
     detail = "User is already in blacklist"
+
+
+class PostsException(HTTPException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = ""
+
+    def __init__(self):
+        super().__init__(status_code=self.status_code, detail=self.detail)
+
+
+class YouAreNotPostAuthorOrIncorrectPostIDException(PostsException):
+    detail = "You are not post author or incorrect post ID"
+
+
+class YouCantSetPostContentToNullException(PostsException):
+    detail = "You can't set post content to null"
