@@ -90,7 +90,3 @@ class PostsException(HTTPException):
 
 class YouAreNotPostAuthorOrIncorrectPostIDException(PostsException):
     detail = "You are not post author or incorrect post ID"
-
-
-class YouCantSetPostContentToNullException(PostsException):
-    detail = "You can't set post content to null"

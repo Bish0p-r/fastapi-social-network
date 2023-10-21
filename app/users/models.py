@@ -8,7 +8,7 @@ from app.blacklist.models import Blacklist
 from app.posts.models import Posts
 
 
-class PrivacySettingsEnum(Enum):
+class PrivacySettingsEnum(str, Enum):
     PUBLIC = 'public'
     FRIENDS = 'friends'
     PRIVATE = 'private'

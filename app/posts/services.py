@@ -1,7 +1,7 @@
 from sqlalchemy.exc import NoResultFound, IntegrityError
 
 from app.posts.repository import PostsRepository
-from app.utils.exceptions import YouAreNotPostAuthorOrIncorrectPostIDException, YouCantSetPostContentToNullException
+from app.utils.exceptions import YouAreNotPostAuthorOrIncorrectPostIDException
 
 
 class PostsServices:
@@ -22,5 +22,3 @@ class PostsServices:
             return await self.posts_repository.partial_update(author_id=author_id, post_id=post_id, **data)
         except NoResultFound:
             raise YouAreNotPostAuthorOrIncorrectPostIDException
-        except IntegrityError:
-            raise YouCantSetPostContentToNullException

@@ -27,3 +27,6 @@ class UserServices:
     async def activate_user(self, user_email):
         return await self.user_repository.update_by_email(user_email, is_active=True)
 
+    async def partial_update_user(self, user_id, **data):
+        return await self.user_repository.update(model_id=user_id, **data)
+

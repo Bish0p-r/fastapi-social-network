@@ -31,5 +31,5 @@ class PostAuthorIDRequestSchema(BaseModel):
 
 
 class PostUpdateRequestSchema(BaseModel):
-    title: Optional[str] = None
-    content: Optional[str] = None
+    title: str = None
+    content: str = None
