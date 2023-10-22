@@ -28,12 +28,12 @@ async def get_list_of_posts(
     return await post_services.get_list_of_posts()
 
 
-@router.get("/user-posts")
+@router.get("/user-posts/{author_id}")
 async def get_list_of_user_posts(
-    author_data: PostAuthorIDRequestSchema,
+    author_id: int,
     post_services: PostsServices = GetPostsService
 ) -> List[PostDataResponseSchema]:
-    return await post_services.get_list_of_posts(author=author_data.id)
+    return await post_services.get_list_of_posts(author_id=author_id)
 
 
 @router.post("/create")
@@ -63,4 +63,3 @@ async def delete_post(
     post_services: PostsServices = GetPostsService
 ):
     await post_services.delete_post(author_id=user.id, post_id=post_data.id)
-

@@ -8,8 +8,8 @@ class PostsServices:
     def __init__(self, posts_repository: type[PostsRepository]):
         self.posts_repository: PostsRepository = posts_repository()
 
-    async def get_list_of_posts(self, **filter_by):
-        return await self.posts_repository.find_all(**filter_by)
+    async def get_list_of_posts(self, author_id=None, **filter_by):
+        return await self.posts_repository.get_list_of_posts_with_likes(author_id, **filter_by)
 
     async def create_post(self, author_id, title, content):
         return await self.posts_repository.add(author_id=author_id, title=title, content=content)

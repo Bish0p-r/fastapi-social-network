@@ -90,3 +90,22 @@ class PostsException(HTTPException):
 
 class YouAreNotPostAuthorOrIncorrectPostIDException(PostsException):
     detail = "You are not post author or incorrect post ID"
+
+
+class IncorrectPostIdException(PostsException):
+    detail = "Incorrect post ID"
+
+
+class LikesException(HTTPException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = ""
+
+    def __init__(self):
+        super().__init__(status_code=self.status_code, detail=self.detail)
+
+
+class YouHaveAlreadyLikedThisPostException(LikesException):
+    detail = "You have already liked this post"
+
+
+
