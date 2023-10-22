@@ -17,3 +17,4 @@ class Posts(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     author = relationship('Users', back_populates='posts')
+    liked_by = relationship('Like', back_populates='post')

@@ -1,6 +1,4 @@
 from datetime import date
-from enum import Enum
-from typing import Optional, NotRequired
 
 from pydantic import BaseModel, EmailStr, model_validator, field_validator
 from app.users.models import PrivacySettingsEnum
@@ -22,11 +20,11 @@ class UserMappingSchema(BaseModel):
 
 
 class UserUpdateSchema(BaseModel):
-    first_name: str = str
-    last_name: str = str
+    first_name: str = None
+    last_name: str = None
     privacy_settings: PrivacySettingsEnum = PrivacySettingsEnum.PUBLIC
-    date_of_birth: date = date
-    bio: str = str
+    date_of_birth: date = None
+    bio: str | None = None
 
     @model_validator(mode="before")
     @classmethod
@@ -38,4 +36,3 @@ class UserUpdateSchema(BaseModel):
         if settings_value not in [PrivacySettingsEnum.PUBLIC, PrivacySettingsEnum.FRIENDS, PrivacySettingsEnum.PRIVATE]:
             raise ValueError("Privacy settings must be one of PUBLIC, FRIENDS or PRIVATE")
         return value
-

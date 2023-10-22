@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 from app.database import Base
 from app.blacklist.models import Blacklist
 from app.posts.models import Posts
+from app.likes.models import Like
 
 
 class PrivacySettingsEnum(str, Enum):
@@ -36,3 +37,5 @@ class Users(Base):
     im_blacklisted = relationship('Blacklist', foreign_keys="[Blacklist.blocked_user]")
 
     posts = relationship('Posts', back_populates='author')
+
+    liked_posts = relationship('Like', back_populates='user')
