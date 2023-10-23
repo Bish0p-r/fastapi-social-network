@@ -4,6 +4,7 @@ from sqlalchemy import Column, String, Integer, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 
 from app.database import Base
+from app.comments.models import Comment
 
 
 class Posts(Base):
@@ -18,3 +19,5 @@ class Posts(Base):
 
     author = relationship('Users', back_populates='posts')
     liked_by = relationship('Like', back_populates='post')
+
+    comments = relationship('Comment', back_populates='post')

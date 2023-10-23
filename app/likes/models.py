@@ -14,3 +14,4 @@ class Like(Base):
 
     user = relationship('Users', back_populates='liked_posts')
     post = relationship('Posts', back_populates='liked_by')
+

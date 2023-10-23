@@ -7,6 +7,7 @@ from app.database import Base
 from app.blacklist.models import Blacklist
 from app.posts.models import Posts
 from app.likes.models import Like
+from app.comments.models import Comment
 
 
 class PrivacySettingsEnum(str, Enum):
@@ -39,3 +40,5 @@ class Users(Base):
     posts = relationship('Posts', back_populates='author')
 
     liked_posts = relationship('Like', back_populates='user')
+
+    commented_posts = relationship('Comment', back_populates='user')

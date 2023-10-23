@@ -80,6 +80,10 @@ class UserAlreadyInBlackListException(BlackListException):
     detail = "User is already in blacklist"
 
 
+class YouHaveBeenBlackListedException(BlackListException):
+    detail = "You can't like this post because you are blocked by the author"
+
+
 class PostsException(HTTPException):
     status_code = status.HTTP_400_BAD_REQUEST
     detail = ""

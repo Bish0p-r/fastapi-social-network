@@ -1,7 +1,7 @@
 from sqlalchemy.exc import NoResultFound, IntegrityError
 
 from app.posts.repository import PostsRepository
-from app.utils.exceptions import YouAreNotPostAuthorOrIncorrectPostIDException
+from app.utils.exceptions import YouAreNotPostAuthorOrIncorrectPostIDException, YouHaveBeenBlackListedException
 
 
 class PostsServices:
@@ -22,3 +22,9 @@ class PostsServices:
             return await self.posts_repository.partial_update(author_id=author_id, post_id=post_id, **data)
         except NoResultFound:
             raise YouAreNotPostAuthorOrIncorrectPostIDException
+
+    async def check_permission(self, post_id, black_list=None):
+        if black_list:
+            post = await self.posts_repository.find_by_id(model_id=post_id)
+            if post.author_id in black_list:
+                raise YouHaveBeenBlackListedException
