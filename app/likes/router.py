@@ -49,6 +49,7 @@ async def unlike_the_post(
         user=GetCurrentUser,
         likes_services: LikesServices = GetLikesService
 ):
+    print(user)
     return await likes_services.delete_like(user_id=user.id, post_id=post_id)
 
 

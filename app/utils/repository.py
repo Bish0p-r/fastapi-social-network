@@ -1,6 +1,8 @@
 from fastapi import Depends
-from sqlalchemy import select, insert, delete, update
+from sqlalchemy import select, insert, delete, update, func
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.blacklist.models import Blacklist
 from app.utils.dependencies import ActiveAsyncSession
 from app.database import get_async_session, async_session_maker
 
