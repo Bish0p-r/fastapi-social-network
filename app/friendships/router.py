@@ -7,6 +7,7 @@ from app.friendships.dependencies import GetFriendShipService
 from app.friendships.services import FriendShipServices
 from app.auth.dependencies import GetCurrentUser
 from app.users.schemas import UserSchema
+from app.users.models import Users
 
 
 router = APIRouter(
@@ -17,7 +18,7 @@ router = APIRouter(
 
 @router.get("/me/friendships")
 async def get_my_friendships(
-        user=GetCurrentUser,
+        user: Users = GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ) -> List[UserSchema]:
     return await friendship_services.get_list_of_friendships(user.id)
@@ -26,7 +27,7 @@ async def get_my_friendships(
 @router.post("/send-friend-request")
 async def send_friend_request(
         user_data: FriendShipRequestSchema,
-        user=GetCurrentUser,
+        user: Users = GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ) -> MappingFriendShipSchema:
     return await friendship_services.send_friend_request(from_user_id=user.id, to_user_id=user_data.user_id)
@@ -35,16 +36,17 @@ async def send_friend_request(
 @router.post("/accept-friend-request")
 async def accept_friend_request(
         user_data: FriendShipRequestSchema,
-        user=GetCurrentUser,
+        user: Users = GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ):
+    await friendship_services.check_permission(user.id, user.im_blacklisted)
     return await friendship_services.accept_friend_request(from_user_id=user_data.user_id, to_user_id=user.id)
 
 
 @router.delete("/reject-friend-request")
 async def reject_friend_request(
         user_data: FriendShipRequestSchema,
-        user=GetCurrentUser,
+        user: Users = GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ):
     await friendship_services.cancel_sent_friend_request(from_user_id=user_data.user_id, to_user_id=user.id)
@@ -54,7 +56,7 @@ async def reject_friend_request(
 @router.delete("/cancel-sent-friend-request")
 async def cancel_sent_friend_request(
         user_data: FriendShipRequestSchema,
-        user=GetCurrentUser,
+        user: Users = GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ):
     await friendship_services.cancel_sent_friend_request(from_user_id=user.id, to_user_id=user_data.user_id)
@@ -64,7 +66,7 @@ async def cancel_sent_friend_request(
 @router.delete("/remove-friend")
 async def remove_friend(
         user_data: FriendShipRequestSchema,
-        user=GetCurrentUser,
+        user: Users = GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ):
     await friendship_services.delete_accepted_friend_request(from_user_id=user.id, to_user_id=user_data.user_id)

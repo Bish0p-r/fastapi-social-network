@@ -4,7 +4,7 @@ from asyncpg.exceptions import UniqueViolationError, ForeignKeyViolationError
 
 from app.friendships.repository import FriendShipRepository
 from app.utils.exceptions import FriendShipAlreadyExists, FriendShipRequestAlreadyExists, \
-    FriendShipCannotBeSentToYourself, IncorrectUserIdException
+    FriendShipCannotBeSentToYourself, IncorrectUserIdException, YouHaveBeenBlackListedException
 
 
 class FriendShipServices:
@@ -48,3 +48,7 @@ class FriendShipServices:
 
     async def get_list_of_friendships(self, user_id):
         return await self.friendship_repository.list_user_friendships(user_id=user_id)
+
+    async def check_permission(self, user_id, blacklist: list = None):
+        if blacklist and user_id in blacklist:
+            raise YouHaveBeenBlackListedException

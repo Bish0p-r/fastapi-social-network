@@ -11,6 +11,7 @@ from app.posts.dependencies import GetPostsService
 from app.posts.services import PostsServices
 from app.users.schemas import UserMappingSchema
 from app.posts.schemas import MappingPostSchema
+from app.users.models import Users
 
 
 router = APIRouter(
@@ -21,7 +22,7 @@ router = APIRouter(
 
 @router.get("/my-liked-posts")
 async def get_my_liked_posts(
-        user=GetCurrentUser,
+        user: Users = GetCurrentUser,
         likes_services: LikesServices = GetLikesService
 ) -> List[MappingPostSchema]:
     return await likes_services.get_list_user_liked_posts(user_id=user.id)
@@ -38,7 +39,7 @@ async def get_list_of_users_who_liked_the_post(
 @router.post("/like/{post_id}")
 async def like_the_post(
         post_id: int,
-        user=GetCurrentUser,
+        user: Users = GetCurrentUser,
         likes_services: LikesServices = GetLikesService,
         post_services: PostsServices = GetPostsService
 ):
@@ -50,10 +51,9 @@ async def like_the_post(
 @router.delete("/unlike/{post_id}")
 async def unlike_the_post(
         post_id: int,
-        user=GetCurrentUser,
+        user: Users = GetCurrentUser,
         likes_services: LikesServices = GetLikesService
 ):
-    print(user)
     return await likes_services.delete_like(user_id=user.id, post_id=post_id)
 
 

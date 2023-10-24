@@ -1,7 +1,13 @@
 from datetime import date
+from typing import List
 
 from pydantic import BaseModel, EmailStr, model_validator, field_validator
 from app.users.models import PrivacySettingsEnum
+from app.friendships.schemas import FriendshipSchema
+from app.blacklist.schemas import BlackListSchema
+from app.comments.schemas import CommentDataResponseSchema
+from app.likes.schemas import LikeSchema
+from app.posts.schemas import PostDataResponseSchema
 
 
 class UserSchema(BaseModel):
@@ -13,6 +19,16 @@ class UserSchema(BaseModel):
     date_of_birth: date | None
     bio: str | None
     is_active: bool
+
+
+class UserFullInfoSchema(UserSchema):
+    posts: List[PostDataResponseSchema]
+    liked_posts: List[LikeSchema]
+    commented_posts: List[CommentDataResponseSchema]
+    outgoing_requests: List[FriendshipSchema]
+    incoming_requests: List[FriendshipSchema]
+    my_blacklist: List[BlackListSchema]
+    im_blacklisted: List[BlackListSchema]
 
 
 class UserMappingSchema(BaseModel):

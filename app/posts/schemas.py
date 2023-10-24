@@ -20,7 +20,7 @@ class PostDataResponseSchema(BaseModel):
     content: str
     created_at: datetime
     updated_at: datetime
-    likes_count: int | None
+    likes_count: int | None = None
 
 
 class MappingPostSchema(BaseModel):

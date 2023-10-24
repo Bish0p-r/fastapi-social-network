@@ -1,20 +1,27 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Column, Integer, ForeignKey, UniqueConstraint, String, DateTime
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.database import Base
+
+
+if TYPE_CHECKING:
+    from app.users.models import Users
+    from app.posts.models import Posts
 
 
 class Comment(Base):
     __tablename__ = 'comments'
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    post_id = Column(Integer, ForeignKey('posts.id'))
-    text = Column(String, nullable=False)
-    created_at = Column(DateTime, default=datetime.utcnow)
-    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    text: Mapped[str] = mapped_column(String(512))
+    created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    user = relationship('Users', back_populates='commented_posts')
-    post = relationship('Posts', back_populates='comments')
+    user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
+    post_id: Mapped[int] = mapped_column(ForeignKey('posts.id'))
+
+    user: Mapped['Users'] = relationship(back_populates='commented_posts')
+    post: Mapped['Posts'] = relationship(back_populates='comments')

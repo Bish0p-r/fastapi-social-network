@@ -48,6 +48,7 @@ async def get_current_user(
         raise UserIsNotPresentException
 
     user = await user_services.get_user_by_id_with_blacklist(int(user_id))
+    # user = await user_services.get_user_by_id(int(user_id))
 
     if not user:
         raise UserIsNotPresentException

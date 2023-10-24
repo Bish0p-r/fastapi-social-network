@@ -33,3 +33,5 @@ class UserServices:
     async def partial_update_user(self, user_id, **data):
         return await self.user_repository.update(model_id=user_id, **data)
 
+    async def get_my_full_info(self, id: int):
+        return await self.user_repository.get_my_full_info(id)

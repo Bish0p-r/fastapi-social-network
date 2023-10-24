@@ -37,3 +37,19 @@ class UserRepository(BaseRepository):
             result = await session.execute(query)
             result = result.mappings().one_or_none()
             return result
+
+    async def get_my_full_info(self, id: int):
+        async with async_session_maker() as session:
+            query = select(
+                self.model
+            ).options(
+                joinedload(self.model.posts),
+                joinedload(self.model.liked_posts),
+                joinedload(self.model.commented_posts),
+                joinedload(self.model.outgoing_requests),
+                joinedload(self.model.incoming_requests),
+                joinedload(self.model.im_blacklisted),
+                joinedload(self.model.my_blacklist),
+            ).filter(self.model.id == id)
+
+            return await session.scalar(query)

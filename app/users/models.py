@@ -1,13 +1,19 @@
 from enum import Enum
+from datetime import date
+from typing import TYPE_CHECKING, List
 
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Date, Enum as EnumField, UniqueConstraint
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from app.database import Base
-from app.blacklist.models import Blacklist
-from app.posts.models import Posts
-from app.likes.models import Like
-from app.comments.models import Comment
+
+
+if TYPE_CHECKING:
+    from app.blacklist.models import Blacklist
+    from app.posts.models import Posts
+    from app.likes.models import Like
+    from app.comments.models import Comment
+    from app.friendships.models import Friendships
 
 
 class PrivacySettingsEnum(str, Enum):
@@ -19,26 +25,26 @@ class PrivacySettingsEnum(str, Enum):
 class Users(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    email = Column(String, unique=True)
-    hashed_password = Column(String)
-    first_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
-    date_of_birth = Column(Date)
-    bio = Column(String)
-    privacy_settings = Column(EnumField(PrivacySettingsEnum), default=PrivacySettingsEnum.PUBLIC)
+    id: Mapped[int] = mapped_column(primary_key=True)
+    email: Mapped[str] = mapped_column(unique=True)
+    hashed_password: Mapped[str]
+    first_name: Mapped[str]
+    last_name: Mapped[str]
+    date_of_birth: Mapped[date] = mapped_column(nullable=True)
+    bio: Mapped[str] = mapped_column(nullable=True)
+    privacy_settings: Mapped[PrivacySettingsEnum] = mapped_column(default=PrivacySettingsEnum.PUBLIC)
 
-    is_superuser = Column(Boolean, default=False)
-    is_active = Column(Boolean, default=False)
+    is_superuser: Mapped[bool] = mapped_column(default=False)
+    is_active: Mapped[bool] = mapped_column(default=False)
 
-    incoming_requests = relationship('Friendships', foreign_keys="[Friendships.to_user]")
-    outgoing_requests = relationship('Friendships', foreign_keys="[Friendships.from_user]")
+    incoming_requests: Mapped[List['Friendships']] = relationship(foreign_keys="[Friendships.to_user]")
+    outgoing_requests: Mapped[List['Friendships']] = relationship(foreign_keys="[Friendships.from_user]")
 
-    my_blacklist = relationship('Blacklist', foreign_keys="[Blacklist.initiator_user]")
-    im_blacklisted = relationship('Blacklist', foreign_keys="[Blacklist.blocked_user]")
+    my_blacklist: Mapped[List['Blacklist']] = relationship(foreign_keys="[Blacklist.initiator_user]")
+    im_blacklisted: Mapped[List['Blacklist']] = relationship(foreign_keys="[Blacklist.blocked_user]")
 
-    posts = relationship('Posts', back_populates='author')
+    posts: Mapped[List['Posts']] = relationship(back_populates='author')
 
-    liked_posts = relationship('Like', back_populates='user')
+    liked_posts: Mapped[List['Like']] = relationship(back_populates='user')
 
-    commented_posts = relationship('Comment', back_populates='user')
+    commented_posts: Mapped[List['Comment']] = relationship(back_populates='user')

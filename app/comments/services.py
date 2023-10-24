@@ -1,3 +1,5 @@
+from sqlalchemy.exc import IntegrityError
+
 from app.comments.repository import CommentsRepository
 
 
@@ -12,7 +14,10 @@ class CommentsServices:
         return await self.comments_repository.find_all(user_id=user_id)
 
     async def create_comment(self, user_id, post_id, text):
-        return await self.comments_repository.add(user_id=user_id, post_id=post_id, text=text)
+        try:
+            return await self.comments_repository.add(user_id=user_id, post_id=post_id, text=text)
+        except IntegrityError as e:
+            print(123)
 
     async def delete_comment(self, user_id, comment_id):
         await self.comments_repository.delete(user_id=user_id, id=comment_id)

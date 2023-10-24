@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
 
 from app.users.services import UserServices
-from app.users.schemas import UserSchema, UserUpdateSchema, UserMappingSchema, UserDetailsSchema
+from app.users.schemas import UserSchema, UserUpdateSchema, UserMappingSchema, UserDetailsSchema, UserFullInfoSchema
 from app.users.dependencies import GetUsersService
 from app.auth.dependencies import get_current_user, GetCurrentUser
 
@@ -16,9 +16,10 @@ router = APIRouter(
 
 @router.get("/me")
 async def get_my_profile(
-        user=GetCurrentUser
-) -> UserDetailsSchema:
-    return user
+        user=GetCurrentUser,
+        user_services: UserServices = GetUsersService
+) -> UserFullInfoSchema:
+    return await user_services.get_my_full_info(user.id)
 
 
 @router.get("")
