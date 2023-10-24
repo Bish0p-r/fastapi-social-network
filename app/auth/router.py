@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, Response, status, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import EmailStr
@@ -12,6 +12,7 @@ from app.utils.exceptions import UserAlreadyExists, IncorrectEmailOrPassword, Us
 from app.auth.schemas import UserRegisterSchema, UserLoginSchema, AccessToken, EmailSchema
 from app.users.schemas import UserMappingSchema
 from app.users.repository import UserRepository
+from app.tasks.tasks import send_confirmation_email
 
 
 router = APIRouter(
@@ -21,7 +22,11 @@ router = APIRouter(
 
 
 @router.post("/register")
-async def register(user_data: UserRegisterSchema, user_services: UserServices = GetUsersService):
+async def register(
+        request: Request,
+        user_data: UserRegisterSchema,
+        user_services: UserServices = GetUsersService
+):
     existing_user = await user_services.get_user_by_email(user_data.email)
 
     if existing_user:
@@ -37,9 +42,9 @@ async def register(user_data: UserRegisterSchema, user_services: UserServices = 
     )
 
     email_verif_token = create_access_token(data={"sub": user_data.email, "type": "email-verif"}, expire_in=60)
+    verification_url = request.url_for("verify_email", token=email_verif_token)
 
-    # TODO: celery task
-    print(email_verif_token)
+    send_confirmation_email.delay(user_data.email, str(verification_url))
 
     return JSONResponse(status_code=status.HTTP_201_CREATED, content={"message": "User created"})
 
@@ -78,7 +83,11 @@ async def verify_email(
 
 
 @router.post("/resend-email-verification")
-async def resend_email_verification(data: EmailSchema, user_services: UserServices = GetUsersService):
+async def resend_email_verification(
+        request: Request,
+        data: EmailSchema,
+        user_services: UserServices = GetUsersService
+):
     user = await user_services.get_user_by_email(data.email)
 
     if not user or user.is_active:
@@ -86,7 +95,8 @@ async def resend_email_verification(data: EmailSchema, user_services: UserServic
 
     email_verif_token = create_access_token(data={"sub": data.email, "type": "email-verif"}, expire_in=60)
 
-    # TODO: celery task
-    print(email_verif_token)
+    verification_url = request.url_for("verify_email", token=email_verif_token, _external=True)
+
+    send_confirmation_email.delay(data.email, verification_url)
 
     return JSONResponse(status_code=status.HTTP_201_CREATED, content={"message": "Email sent"})

@@ -2,6 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
+from fastapi_cache.decorator import cache
 
 from app.auth.dependencies import GetCurrentUser
 from app.blacklist.schemas import UserIDRequestSchema
@@ -17,6 +18,7 @@ router = APIRouter(
 
 
 @router.get("/list")
+@cache(expire=30)
 async def get_list_of_blacklisted_users(
         user=GetCurrentUser,
         blacklist_services: BlacklistServices = GetBlacklistService,

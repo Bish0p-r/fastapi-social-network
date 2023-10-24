@@ -13,14 +13,3 @@ class Friendships(Base):
     from_user: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
 
     is_accepted: Mapped[bool] = mapped_column(default=False)
-
-    # incoming_requests = relationship(
-    #     'Users',
-    #     foreign_keys="[Friendships.to_user]",
-    #     back_populates='incoming_requests'
-    # )
-    # outgoing_requests = relationship(
-    #     'Users',
-    #     foreign_keys="[Friendships.from_user]",
-    #     back_populates='outgoing_requests'
-    # )

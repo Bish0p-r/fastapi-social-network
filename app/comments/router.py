@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter
+from fastapi_cache.decorator import cache
 
 from app.auth.dependencies import GetCurrentUser
 from app.comments.dependencies import GetCommentsService
@@ -22,6 +23,7 @@ router = APIRouter(
 
 
 @router.get("/my-comments")
+@cache(expire=30)
 async def get_list_of_my_comments(
         user=GetCurrentUser,
         comments_services: CommentsServices = GetCommentsService
@@ -30,6 +32,7 @@ async def get_list_of_my_comments(
 
 
 @router.get("/post-comments/{post_id}")
+@cache(expire=30)
 async def get_list_of_comments_by_post_id(
         post_id: int,
         comments_services: CommentsServices = GetCommentsService

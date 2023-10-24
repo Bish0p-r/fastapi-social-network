@@ -1,6 +1,8 @@
 from typing import Annotated, List
+
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import JSONResponse
+from fastapi_cache.decorator import cache
 
 from app.users.services import UserServices
 from app.users.schemas import UserSchema, UserUpdateSchema, UserMappingSchema, UserDetailsSchema, UserFullInfoSchema
@@ -23,6 +25,7 @@ async def get_my_profile(
 
 
 @router.get("")
+@cache(expire=30)
 async def get_list_of_users(
         user_services: UserServices = GetUsersService
 ) -> List[UserSchema]:
@@ -30,6 +33,7 @@ async def get_list_of_users(
 
 
 @router.get("/{user_id}")
+@cache(expire=30)
 async def get_user_by_id(
         user_id: int,
         user_services: UserServices = GetUsersService
@@ -44,5 +48,4 @@ async def partial_update_user(
         user_services: UserServices = GetUsersService
 ) -> UserMappingSchema:
     data = user_data.model_dump(exclude_unset=True)
-    print(data)
     return await user_services.partial_update_user(user.id, **data)

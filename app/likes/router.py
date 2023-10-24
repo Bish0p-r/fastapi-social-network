@@ -2,7 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, status
 from fastapi.responses import JSONResponse
-
+from fastapi_cache.decorator import cache
 
 from app.auth.dependencies import GetCurrentUser
 from app.likes.services import LikesServices
@@ -21,6 +21,7 @@ router = APIRouter(
 
 
 @router.get("/my-liked-posts")
+@cache(expire=30)
 async def get_my_liked_posts(
         user: Users = GetCurrentUser,
         likes_services: LikesServices = GetLikesService

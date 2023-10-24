@@ -1,6 +1,7 @@
 from typing import List
 
 from fastapi import APIRouter
+from fastapi_cache.decorator import cache
 
 from app.auth.dependencies import GetCurrentUser
 from app.posts.services import PostsServices
@@ -22,6 +23,7 @@ router = APIRouter(
 
 
 @router.get("/list")
+@cache(expire=30)
 async def get_list_of_posts(
     post_services: PostsServices = GetPostsService
 ) -> List[PostDataResponseSchema]:
@@ -29,6 +31,7 @@ async def get_list_of_posts(
 
 
 @router.get("/user-posts/{author_id}")
+@cache(expire=10)
 async def get_list_of_user_posts(
     author_id: int,
     post_services: PostsServices = GetPostsService
