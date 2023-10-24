@@ -94,8 +94,7 @@ async def resend_email_verification(
         raise UserIsNotPresentException
 
     email_verif_token = create_access_token(data={"sub": data.email, "type": "email-verif"}, expire_in=60)
-
-    verification_url = request.url_for("verify_email", token=email_verif_token, _external=True)
+    verification_url = request.url_for("verify_email", token=email_verif_token)
 
     send_confirmation_email.delay(data.email, verification_url)
 
