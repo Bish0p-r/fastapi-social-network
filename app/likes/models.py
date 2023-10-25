@@ -22,3 +22,5 @@ class Like(Base):
     user: Mapped['Users'] = relationship(back_populates='liked_posts')
     post: Mapped['Posts'] = relationship(back_populates='liked_by')
 
+    def __str__(self):
+        return f"LikeID: {self.id}, UserID: {self.user_id}, PostID: {self.post_id}"

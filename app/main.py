@@ -3,7 +3,9 @@ from fastapi import FastAPI
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
+from sqladmin import Admin
 
+from app.admin.auth import authentication_backend
 from app.auth.router import router as auth_router
 from app.users.router import router as users_router
 from app.friendships.router import router as friends_router
@@ -12,6 +14,9 @@ from app.posts.router import router as posts_router
 from app.likes.router import router as likes_router
 from app.comments.router import router as comments_router
 from app.config import settings
+from app.database import async_engine
+
+from app.admin.views import UsersAdmin, PostsAdmin, CommentsAdmin, LikesAdmin, BlacklistsAdmin, FriendshipsAdmin
 
 
 app = FastAPI()
@@ -23,6 +28,16 @@ app.include_router(blacklist_router)
 app.include_router(posts_router)
 app.include_router(likes_router)
 app.include_router(comments_router)
+
+# authentication_backend=authentication_backend
+admin = Admin(app, async_engine, authentication_backend=authentication_backend)
+
+admin.add_view(UsersAdmin)
+admin.add_view(PostsAdmin)
+admin.add_view(CommentsAdmin)
+admin.add_view(LikesAdmin)
+admin.add_view(BlacklistsAdmin)
+admin.add_view(FriendshipsAdmin)
 
 
 if settings.MODE == "TEST":

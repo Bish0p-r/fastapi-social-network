@@ -28,3 +28,6 @@ class Posts(Base):
     liked_by: Mapped[List['Like']] = relationship(back_populates='post')
 
     comments: Mapped[List['Comment']] = relationship(back_populates='post')
+
+    def __str__(self):
+        return f"PostID: {self.id}, AuthorID: {self.author_id}"

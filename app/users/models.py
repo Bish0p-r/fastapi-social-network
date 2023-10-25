@@ -48,3 +48,6 @@ class Users(Base):
     liked_posts: Mapped[List['Like']] = relationship(back_populates='user')
 
     commented_posts: Mapped[List['Comment']] = relationship(back_populates='user')
+
+    def __str__(self):
+        return f"User #{self.id}, Email: {self.email}"

@@ -64,7 +64,7 @@ async def login(
         raise UserIsNotActiveException
 
     access_token = create_access_token(data={"sub": str(user.id), "type": "access-token"})
-    response.set_cookie("booking_access_token", access_token, httponly=True)
+    response.set_cookie("sn_access_token", access_token, httponly=True)
 
     return AccessToken(access_token=access_token)
 

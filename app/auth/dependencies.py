@@ -20,11 +20,10 @@ from app.utils.exceptions import (
 
 
 def get_token(request: Request) -> str:
-    token = request.cookies.get("booking_access_token")
+    token = request.cookies.get("sn_access_token")
 
     if not token:
         raise TokenAbsentException
-
     return token
 
 
@@ -48,11 +47,9 @@ async def get_current_user(
         raise UserIsNotPresentException
 
     user = await user_services.get_user_by_id_with_blacklist(int(user_id))
-    # user = await user_services.get_user_by_id(int(user_id))
 
     if not user:
         raise UserIsNotPresentException
-
     return user
 
 

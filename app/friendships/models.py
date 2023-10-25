@@ -13,3 +13,6 @@ class Friendships(Base):
     from_user: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
 
     is_accepted: Mapped[bool] = mapped_column(default=False)
+
+    def __str__(self):
+        return f"FriendshipID: {self.id}, ToUserID: {self.to_user}, FromUserID: {self.from_user}"

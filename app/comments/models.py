@@ -25,3 +25,6 @@ class Comment(Base):
 
     user: Mapped['Users'] = relationship(back_populates='commented_posts')
     post: Mapped['Posts'] = relationship(back_populates='comments')
+
+    def __str__(self):
+        return f"CommentID: {self.id}, UserID: {self.user_id}, PostID: {self.post_id}"
