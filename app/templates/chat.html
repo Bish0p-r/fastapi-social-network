@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Personal Chat</title>
+  </head>
+  <body>
+    <h1>WebSocket Personal Chat</h1>
+    <h2>My ID: {{ user_id }}</h2>
+    <h2>Recipient ID: {{ recipient_id }}</h2>
+    <form onsubmit="sendMessage(event)">
+      <input type="text" id="messageText" autocomplete="off" />
+      <button>Send</button>
+    </form>
+    <ul id="messages"></ul>
+    <script>
+      console.log("Hello from FastAPI");
+      var user_id = {{ user_id }};
+      var recipient_id = {{ recipient_id }};
+      console.log(user_id, recipient_id);
+      var ws = new WebSocket(`ws://localhost:8000/chat/ws/${user_id}/${recipient_id}`);
+      ws.onmessage = function (event) {
+        var messages = document.getElementById("messages");
+        var message = document.createElement("li");
+        var content = document.createTextNode(event.data);
+        message.appendChild(content);
+        messages.appendChild(message);
+      };
+      function sendMessage(event) {
+        var input = document.getElementById("messageText");
+        ws.send(input.value);
+        input.value = "";
+        event.preventDefault();
+      }
+    </script>
+  </body>
+</html>

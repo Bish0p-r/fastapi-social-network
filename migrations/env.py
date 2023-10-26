@@ -12,6 +12,7 @@ from app.blacklist.models import Blacklist
 from app.posts.models import Posts
 from app.likes.models import Like
 from app.comments.models import Comment
+from app.chat.models import Message
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

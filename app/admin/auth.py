@@ -19,8 +19,8 @@ class AdminAuth(AuthenticationBackend):
     ) -> bool:
         form = await request.form()
         email, password = form["username"], form["password"]
-
         user = await authenticate_user(email, password, user_services)
+
         if user and user.is_superuser:
             access_token = create_access_token({"sub": str(user.id)})
             request.session.update({"token": access_token})
@@ -34,7 +34,7 @@ class AdminAuth(AuthenticationBackend):
             self,
             request: Request,
             user_services=UserServices(UserRepository)
-    ) -> bool:
+    ) -> bool | RedirectResponse:
         token = request.session.get("token")
         if not token:
             return RedirectResponse(request.url_for("admin:login"), status_code=302)

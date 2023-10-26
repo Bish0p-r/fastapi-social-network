@@ -17,6 +17,7 @@ class CommentsServices:
         try:
             return await self.comments_repository.add(user_id=user_id, post_id=post_id, text=text)
         except IntegrityError as e:
+            # TODO: error handling
             print(123)
 
     async def delete_comment(self, user_id, comment_id):

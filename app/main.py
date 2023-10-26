@@ -5,6 +5,8 @@ from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
 from sqladmin import Admin
 
+from app.config import settings
+from app.database import async_engine
 from app.admin.auth import authentication_backend
 from app.auth.router import router as auth_router
 from app.users.router import router as users_router
@@ -13,8 +15,7 @@ from app.blacklist.router import router as blacklist_router
 from app.posts.router import router as posts_router
 from app.likes.router import router as likes_router
 from app.comments.router import router as comments_router
-from app.config import settings
-from app.database import async_engine
+from app.chat.router import router as chat_router
 
 from app.admin.views import UsersAdmin, PostsAdmin, CommentsAdmin, LikesAdmin, BlacklistsAdmin, FriendshipsAdmin
 
@@ -28,8 +29,9 @@ app.include_router(blacklist_router)
 app.include_router(posts_router)
 app.include_router(likes_router)
 app.include_router(comments_router)
+app.include_router(chat_router)
 
-# authentication_backend=authentication_backend
+
 admin = Admin(app, async_engine, authentication_backend=authentication_backend)
 
 admin.add_view(UsersAdmin)
