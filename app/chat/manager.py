@@ -33,8 +33,8 @@ class ConnectionManager:
         await websocket.accept()
         self.active_connections[client_id] = websocket
 
-    def disconnect(self, user: Users):
-        del self.active_connections[user.id]
+    def disconnect(self, user_id: int):
+        del self.active_connections[user_id]
 
     async def send_personal_message(self, message: str, recipient_id: int, client_id: int):
 

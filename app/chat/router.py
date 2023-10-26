@@ -49,11 +49,18 @@ async def websocket_chat(
 ):
     await manager.connect(websocket, client_id)
 
+    recent_messages = await messages_service.list_of_sent_messages(from_user=client_id, to_user=recipient_id)
+    if recent_messages:
+        await websocket.send_text(f'Recent messages:')
+        for message in recent_messages:
+            await websocket.send_text(f"User #{message.from_user} says: {message.content}")
+    await websocket.send_text(f'New messages:')
+
     try:
         while True:
             data = await websocket.receive_text()
             await websocket.send_text(f"You wrote: {data}")
             await messages_service.add_message(from_user=client_id, to_user=recipient_id, content=data)
-            await manager.send_personal_message(f"Client #{client_id} says: {data}", recipient_id, client_id)
+            await manager.send_personal_message(f"User #{client_id} says: {data}", recipient_id, client_id)
     except WebSocketDisconnect:
-        await websocket.close()
+        manager.disconnect(client_id)
