@@ -2,6 +2,44 @@
 <html>
   <head>
     <title>Personal Chat</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      h2 {
+        color: #888;
+      }
+
+      form {
+        margin-bottom: 10px;
+      }
+
+      input[type="text"] {
+        width: 300px;
+        padding: 5px;
+        font-size: 14px;
+      }
+
+      button {
+        padding: 5px 10px;
+        font-size: 14px;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        margin-bottom: 5px;
+      }
+    </style>
   </head>
   <body>
     <h1>WebSocket Personal Chat</h1>
@@ -17,25 +55,24 @@
       var recipient_id = {{ recipient_id }};
 
       function appendMessage(msg) {
-        let messages = document.getElementById('messages')
-        let message = document.createElement('li')
-        let content = document.createTextNode(msg)
-        message.appendChild(content)
-        messages.appendChild(message)
+        var messages = document.getElementById("messages");
+        var message = document.createElement("li");
+        var content = document.createTextNode(msg);
+        message.appendChild(content);
+        messages.appendChild(message);
       }
 
+      var ws = new WebSocket(`ws://localhost:8000/chat/ws/${user_id}/${recipient_id}`);
+      ws.onmessage = function (event) {
+        appendMessage(event.data);
+      };
 
-        var ws = new WebSocket(`ws://localhost:8000/chat/ws/${user_id}/${recipient_id}`);
-        ws.onmessage = function (event) {
-          appendMessage(event.data)
-        };
-
-        function sendMessage(event) {
-          var input = document.getElementById("messageText");
-          ws.send(input.value);
-          input.value = "";
-          event.preventDefault();
-        }
+      function sendMessage(event) {
+        var input = document.getElementById("messageText");
+        ws.send(input.value);
+        input.value = "";
+        event.preventDefault();
+      }
     </script>
   </body>
 </html>

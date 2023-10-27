@@ -1,0 +1,17 @@
+[
+  {
+    "author_id": 2,
+    "title": "test_title_1",
+    "content": "test_content_1"
+  },
+  {
+    "author_id": 2,
+    "title": null,
+    "content": "test_content_2"
+  },
+  {
+    "author_id": 3,
+    "title": "test_title_3",
+    "content": "test_content_3"
+  }
+]

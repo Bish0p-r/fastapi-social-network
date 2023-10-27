@@ -19,7 +19,21 @@ class Settings(BaseSettings):
 
     @property
     def db_url(self):
-        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        return f"postgresql+asyncpg://{self.DB_USER}:" \
+               f"{self.DB_PASS}@{self.DB_HOST}:" \
+               f"{self.DB_PORT}/{self.DB_NAME}"
+
+    TEST_DB_HOST: str
+    TEST_DB_PORT: int
+    TEST_DB_USER: str
+    TEST_DB_PASS: str
+    TEST_DB_NAME: str
+
+    @property
+    def test_db_url(self):
+        return f"postgresql+asyncpg://{self.TEST_DB_USER}:" \
+               f"{self.TEST_DB_PASS}@{self.TEST_DB_HOST}:" \
+               f"{self.TEST_DB_PORT}/{self.TEST_DB_NAME}"
 
     SMTP_HOST: str
     SMTP_PORT: int

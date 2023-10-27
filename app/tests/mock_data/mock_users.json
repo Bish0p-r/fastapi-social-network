@@ -1,0 +1,24 @@
+[
+  {
+    "email": "test_admin@test.com",
+    "hashed_password": "$2b$12$mXfDwuqBJZMCLpvrBK7AjepPm39ee2kHlyXSCmEXV3mk1c95.0i5S",
+    "first_name": "test_admin_first_name",
+    "last_name": "test_admin_last_name",
+    "is_superuser": true,
+    "is_active": true
+  },
+  {
+    "email": "test_user1@test.com",
+    "hashed_password": "$2b$12$LbJSHGQgbGDb/LxMbM00ieu/GGBJfn7qMPitiKNYtq4MOYKPyOB2.",
+    "first_name": "test_first_name1",
+    "last_name": "test_last_name1",
+    "is_active": true
+  },
+  {
+    "email": "test_user2@test.com",
+    "hashed_password": "$2b$12$QUIfdCM7GvMdE011orrTIOFlciB8pFmZid/l1Cpyrj2YYo2zKty/C",
+    "first_name": "test_first_name2",
+    "last_name": "test_last_name2",
+    "is_active": true
+  }
+]

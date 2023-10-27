@@ -4,7 +4,7 @@ from fastapi import WebSocket, APIRouter, Request, WebSocketDisconnect
 from starlette.templating import Jinja2Templates
 
 from app.chat.manager import manager
-from app.auth.dependencies import GetCurrentUser, get_token, get_current_user
+from app.auth.dependencies import GetCurrentUser
 from app.chat.dependencies import GetMessagesServices
 from app.chat.services import MessagesServices
 from app.users.models import Users
@@ -27,7 +27,11 @@ async def get(
 ):
     return templates.TemplateResponse(
         "chat.html",
-        {"request": request, "user_id": user.id, "recipient_id": recipient_id}
+        {
+            "request": request,
+            "user_id": user.id,
+            "recipient_id": recipient_id
+        }
     )
 
 

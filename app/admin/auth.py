@@ -1,4 +1,5 @@
 from sqladmin import Admin
+from fastapi import HTTPException
 from sqladmin.authentication import AuthenticationBackend
 from starlette.requests import Request
 from starlette.responses import RedirectResponse

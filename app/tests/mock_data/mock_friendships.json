@@ -1,0 +1,12 @@
+[
+  {
+    "to_user": 1,
+    "from_user": 3,
+    "is_accepted": true
+  },
+  {
+    "to_user": 3,
+    "from_user": 2,
+    "is_accepted": true
+  }
+]
