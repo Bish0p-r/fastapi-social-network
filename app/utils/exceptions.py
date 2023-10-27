@@ -10,7 +10,7 @@ class AuthException(HTTPException):
 
 
 class UserAlreadyExists(AuthException):
-    status_code = status.HTTP_400_BAD_REQUEST
+    status_code = status.HTTP_409_CONFLICT
     detail = "User with this email already exists"
 
 
@@ -42,6 +42,11 @@ class TokenAbsentException(AuthException):
 class UserIsNotActiveException(AuthException):
     status_code = status.HTTP_401_UNAUTHORIZED
     detail = "User is not active"
+
+
+class UserIdDoesNotExistException(AuthException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Incorrect user ID"
 
 
 class FriendShipException(HTTPException):

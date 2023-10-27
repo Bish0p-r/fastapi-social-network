@@ -22,7 +22,7 @@ class UserRepository(BaseRepository):
             blacklist_subquery = (
                 select(func.array_agg(Blacklist.initiator_user))
                 .where(Blacklist.blocked_user == id)
-                .as_scalar()
+                .scalar_subquery()
             )
 
             query = (
@@ -38,7 +38,7 @@ class UserRepository(BaseRepository):
             result = result.mappings().one_or_none()
             return result
 
-    async def get_my_full_info(self, id: int):
+    async def get_my_full_info(self, model_id: int):
         async with async_session_maker() as session:
             query = select(
                 self.model
@@ -50,6 +50,6 @@ class UserRepository(BaseRepository):
                 joinedload(self.model.incoming_requests),
                 joinedload(self.model.im_blacklisted),
                 joinedload(self.model.my_blacklist),
-            ).filter(self.model.id == id)
+            ).filter(self.model.id == model_id)
 
             return await session.scalar(query)

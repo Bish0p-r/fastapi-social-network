@@ -43,7 +43,7 @@ class BaseRepository:
 
     async def update(self, model_id: int, **data):
         async with async_session_maker() as session:
-            query = update(self.model).values(**data).filter_by(id=model_id).returning(self.model)
+            query = update(self.model).values(**data).filter_by(id=model_id).returning(self.model.__table__.columns)
             result = await session.execute(query)
             await session.commit()
             return result.mappings().one_or_none()

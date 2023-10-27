@@ -71,7 +71,7 @@ async def login(
 
 @router.post("/logout")
 async def logout(response: Response):
-    response.delete_cookie("booking_access_token")
+    response.delete_cookie("sn_access_token")
 
 
 @router.get("/verify-email/{token}")

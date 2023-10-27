@@ -68,7 +68,7 @@ async def ac():
         yield ac
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 async def authenticated_ac():
     async with AsyncClient(app=fastapi_app, base_url="http://test") as ac:
         await ac.post("/auth/login", json={

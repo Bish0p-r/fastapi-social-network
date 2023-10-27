@@ -4,8 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from app.database import get_async_session
 from app.users.repository import UserRepository
 from app.utils.dependencies import ActiveAsyncSession
-from app.utils.exceptions import FriendShipAlreadyExists, FriendShipRequestAlreadyExists, \
-    FriendShipCannotBeSentToYourself
+from app.utils.exceptions import UserIdDoesNotExistException
 
 
 class UserServices:
@@ -16,7 +15,10 @@ class UserServices:
         return await self.user_repository.find_all(is_active=is_active, **filter_by)
 
     async def get_user_by_id(self, user_id):
-        return await self.user_repository.find_one_or_none(id=user_id)
+        result = await self.user_repository.find_one_or_none(id=user_id, is_active=True)
+        if not result:
+            raise UserIdDoesNotExistException
+        return result
 
     async def get_user_by_id_with_blacklist(self, user_id):
         return await self.user_repository.find_one_or_none_with_blacklist(id=user_id)
@@ -33,5 +35,5 @@ class UserServices:
     async def partial_update_user(self, user_id, **data):
         return await self.user_repository.update(model_id=user_id, **data)
 
-    async def get_my_full_info(self, id: int):
-        return await self.user_repository.get_my_full_info(id)
+    async def get_my_full_info(self, model_id: int):
+        return await self.user_repository.get_my_full_info(model_id)

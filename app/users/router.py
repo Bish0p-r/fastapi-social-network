@@ -46,6 +46,6 @@ async def partial_update_user(
         user_data: UserUpdateSchema,
         user=GetCurrentUser,
         user_services: UserServices = GetUsersService
-) -> UserMappingSchema:
+) -> UserSchema:
     data = user_data.model_dump(exclude_unset=True)
     return await user_services.partial_update_user(user.id, **data)
