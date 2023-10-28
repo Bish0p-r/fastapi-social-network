@@ -85,6 +85,10 @@ class UserAlreadyInBlackListException(BlackListException):
     detail = "User is already in blacklist"
 
 
+class UserNotInBlackListException(BlackListException):
+    detail = "User is not in blacklist"
+
+
 class YouHaveBeenBlackListedException(BlackListException):
     detail = "You can't like this post because you are blocked by the author"
 

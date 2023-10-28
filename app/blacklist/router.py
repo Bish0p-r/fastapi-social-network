@@ -36,11 +36,10 @@ async def add_user_to_blacklist(
     return JSONResponse(status_code=status.HTTP_201_CREATED, content={"message": "User blocked"})
 
 
-@router.delete("/unblock")
+@router.delete("/unblock/{user_id}")
 async def remove_user_from_blacklist(
-        user_data: UserIDRequestSchema,
+        user_id: int,
         user=GetCurrentUser,
         blacklist_services: BlacklistServices = GetBlacklistService,
 ):
-    await blacklist_services.remove_user_from_blacklist(user_id=user.id, blocked_user_id=user_data.user_id)
-    return status.HTTP_204_NO_CONTENT
+    await blacklist_services.remove_user_from_blacklist(user_id=user.id, blocked_user_id=user_id)
