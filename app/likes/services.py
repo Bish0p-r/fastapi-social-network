@@ -26,4 +26,6 @@ class LikesServices:
             raise IncorrectPostIdException
 
     async def delete_like(self, user_id, post_id):
-        return await self.likes_repository.delete(user_id=user_id, post_id=post_id)
+        result = await self.likes_repository.delete(user_id=user_id, post_id=post_id)
+        if result is None:
+            raise IncorrectPostIdException
