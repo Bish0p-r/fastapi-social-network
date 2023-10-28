@@ -121,4 +121,13 @@ class YouHaveAlreadyLikedThisPostException(LikesException):
     detail = "You have already liked this post"
 
 
+class CommentsException(HTTPException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = ""
 
+    def __init__(self):
+        super().__init__(status_code=self.status_code, detail=self.detail)
+
+
+class IncorrectCommentIdOrYouAreNotCommentAuthorException(CommentsException):
+    detail = "Incorrect comment ID or you are not comment author"

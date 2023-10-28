@@ -2,7 +2,7 @@ from sqlalchemy.exc import NoResultFound, IntegrityError
 
 from app.posts.repository import PostsRepository
 from app.utils.exceptions import YouAreNotPostAuthorOrIncorrectPostIDException, YouHaveBeenBlackListedException, \
-    PostDoesNotExistOrYouAreNotPostAuthorException
+    PostDoesNotExistOrYouAreNotPostAuthorException, IncorrectPostIdException
 
 
 class PostsServices:
@@ -29,5 +29,7 @@ class PostsServices:
     async def check_permission(self, post_id: int, black_list: list = None):
         if black_list:
             post = await self.posts_repository.find_by_id(model_id=post_id)
+            if post is None:
+                raise IncorrectPostIdException
             if post and post.author_id in black_list:
                 raise YouHaveBeenBlackListedException

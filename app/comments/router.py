@@ -55,10 +55,10 @@ async def create_comment(
     )
 
 
-@router.delete("/delete")
+@router.delete("/delete/{comment_id}")
 async def delete_comment(
-        comment_data: CommentDeleteRequestSchema,
+        comment_id: int,
         user=GetCurrentUser,
         comments_services: CommentsServices = GetCommentsService,
 ):
-    return await comments_services.delete_comment(user_id=user.id, comment_id=comment_data.comment_id)
+    await comments_services.delete_comment(user_id=user.id, comment_id=comment_id)
