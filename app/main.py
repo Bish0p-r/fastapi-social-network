@@ -48,7 +48,7 @@ if settings.MODE == "TEST":
         encoding="utf8",
         decode_responses=True
     )
-    FastAPICache.init(RedisBackend(redis), prefix="cache")
+    FastAPICache.init(RedisBackend(redis), prefix="cache", enable=False)
 
 
 @app.on_event("startup")

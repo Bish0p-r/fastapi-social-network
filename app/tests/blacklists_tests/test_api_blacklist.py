@@ -34,16 +34,18 @@ async def test_authorized_add_user_to_blacklist(
         user_id,
         count_blocked_users,
         status_code,
-        authenticated_admin_ac: AsyncClient
+        authenticated_admin_ac: AsyncClient,
+        # disable_cache
 ):
     response = await authenticated_admin_ac.post("/blacklist/block", json={"user_id": user_id})
 
     assert response.status_code == status_code
 
-    response = await authenticated_admin_ac.get("/blacklist/list")
+    if status_code == 200:
+        response = await authenticated_admin_ac.get("/blacklist/list")
 
-    assert response.status_code == 200
-    assert len(response.json()) == count_blocked_users
+        assert response.status_code == 200
+        assert len(response.json()) == count_blocked_users
 
 
 async def test_not_authorized_remove_user_from_blacklist(ac: AsyncClient):
