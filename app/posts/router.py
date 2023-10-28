@@ -59,10 +59,10 @@ async def partial_update_post(
     return await post_services.partial_update_post(author_id=user.id, post_id=post_id, **data)
 
 
-@router.delete("/delete")
+@router.delete("/delete/{post_id}")
 async def delete_post(
-    post_data: PostIDRequestSchema,
+    post_id: int,
     user=GetCurrentUser,
     post_services: PostsServices = GetPostsService
 ):
-    await post_services.delete_post(author_id=user.id, post_id=post_data.id)
+    await post_services.delete_post(author_id=user.id, post_id=post_id)

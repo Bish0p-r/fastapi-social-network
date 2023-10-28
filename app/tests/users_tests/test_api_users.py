@@ -4,8 +4,8 @@ import json
 from httpx import AsyncClient
 
 
-async def test_get_my_profile(authenticated_ac: AsyncClient):
-    response = await authenticated_ac.get("/users/me")
+async def test_get_my_profile(authenticated_admin_ac: AsyncClient):
+    response = await authenticated_admin_ac.get("/users/me")
 
     assert response.status_code == 200
     assert response.json().get("email") == "test_admin@test.com"
@@ -14,8 +14,8 @@ async def test_get_my_profile(authenticated_ac: AsyncClient):
     assert response.json().get("privacy_settings") == "public"
 
 
-async def test_get_list_of_users(authenticated_ac: AsyncClient):
-    response = await authenticated_ac.get("/users")
+async def test_get_list_of_users(authenticated_admin_ac: AsyncClient):
+    response = await authenticated_admin_ac.get("/users")
 
     assert response.status_code == 200
     assert len(response.json()) == 3
@@ -33,8 +33,8 @@ async def test_get_list_of_users(authenticated_ac: AsyncClient):
         (None, 422),
     ]
 )
-async def test_get_user_by_id(user_id, status_code, authenticated_ac: AsyncClient):
-    response = await authenticated_ac.get(f"/users/{user_id}")
+async def test_get_user_by_id(user_id, status_code, authenticated_admin_ac: AsyncClient):
+    response = await authenticated_admin_ac.get(f"/users/{user_id}")
 
     assert response.status_code == status_code
 
@@ -68,10 +68,14 @@ async def test_get_user_by_id(user_id, status_code, authenticated_ac: AsyncClien
              "bio": None
          },
          422),
+        ({
+             "extra_field": "123"
+         },
+         422),
     ]
 )
-async def test_partial_update_user(data, status_code, authenticated_ac: AsyncClient):
-    response = await authenticated_ac.patch("/users/update", json=data)
+async def test_partial_update_user(data, status_code, authenticated_admin_ac: AsyncClient):
+    response = await authenticated_admin_ac.patch("/users/update", json=data)
 
     assert response.status_code == status_code
 

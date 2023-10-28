@@ -37,9 +37,10 @@ class BaseRepository:
 
     async def delete(self, **filter_by):
         async with async_session_maker() as session:
-            user_booked_rooms = delete(self.model).filter_by(**filter_by)
-            await session.execute(user_booked_rooms)
+            user_booked_rooms = delete(self.model).filter_by(**filter_by).returning(self.model)
+            result = await session.execute(user_booked_rooms)
             await session.commit()
+            return result.mappings().one_or_none()
 
     async def update(self, model_id: int, **data):
         async with async_session_maker() as session:

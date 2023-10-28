@@ -1,7 +1,8 @@
 from sqlalchemy.exc import NoResultFound, IntegrityError
 
 from app.posts.repository import PostsRepository
-from app.utils.exceptions import YouAreNotPostAuthorOrIncorrectPostIDException, YouHaveBeenBlackListedException
+from app.utils.exceptions import YouAreNotPostAuthorOrIncorrectPostIDException, YouHaveBeenBlackListedException, \
+    PostDoesNotExistOrYouAreNotPostAuthorException
 
 
 class PostsServices:
@@ -15,7 +16,9 @@ class PostsServices:
         return await self.posts_repository.add(author_id=author_id, title=title, content=content)
 
     async def delete_post(self, author_id: int, post_id: int):
-        await self.posts_repository.delete(author_id=author_id, id=post_id)
+        result = await self.posts_repository.delete(author_id=author_id, id=post_id)
+        if result is None:
+            raise PostDoesNotExistOrYouAreNotPostAuthorException
 
     async def partial_update_post(self, author_id: int, post_id: int, **data):
         try:

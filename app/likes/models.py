@@ -17,7 +17,7 @@ class Like(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    post_id: Mapped[int] = mapped_column(ForeignKey('posts.id'))
+    post_id: Mapped[int] = mapped_column(ForeignKey('posts.id', ondelete='CASCADE'))
 
     user: Mapped['Users'] = relationship(back_populates='liked_posts')
     post: Mapped['Posts'] = relationship(back_populates='liked_by')

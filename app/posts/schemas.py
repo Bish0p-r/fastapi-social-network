@@ -1,10 +1,12 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class PostDataRequestSchema(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     title: str | None
     content: str
 
@@ -32,5 +34,7 @@ class PostAuthorIDRequestSchema(BaseModel):
 
 
 class PostUpdateRequestSchema(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     title: str = None
     content: str = None

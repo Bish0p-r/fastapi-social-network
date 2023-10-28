@@ -67,10 +67,10 @@ async def test_login_user(
     assert response.status_code == profile_status_code
 
 
-async def test_logout_user(authenticated_ac: AsyncClient):
-    assert authenticated_ac.cookies["sn_access_token"]
+async def test_logout_user(authenticated_admin_ac: AsyncClient):
+    assert authenticated_admin_ac.cookies["sn_access_token"]
 
-    response = await authenticated_ac.post("/auth/logout")
+    response = await authenticated_admin_ac.post("/auth/logout")
 
     assert response.status_code == 200
     assert response.cookies.get("sn_access_token") is None

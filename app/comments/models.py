@@ -21,7 +21,7 @@ class Comment(Base):
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, onupdate=datetime.utcnow)
 
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'))
-    post_id: Mapped[int] = mapped_column(ForeignKey('posts.id'))
+    post_id: Mapped[int] = mapped_column(ForeignKey('posts.id', ondelete='CASCADE'))
 
     user: Mapped['Users'] = relationship(back_populates='commented_posts')
     post: Mapped['Posts'] = relationship(back_populates='comments')

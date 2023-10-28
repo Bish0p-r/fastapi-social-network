@@ -1,7 +1,7 @@
 from datetime import date
 from typing import List
 
-from pydantic import BaseModel, EmailStr, model_validator, field_validator
+from pydantic import BaseModel, EmailStr, model_validator, field_validator, ConfigDict
 from app.users.models import PrivacySettingsEnum
 from app.friendships.schemas import FriendshipSchema
 from app.blacklist.schemas import BlackListSchema
@@ -40,6 +40,8 @@ class UserDetailsSchema(UserSchema):
 
 
 class UserUpdateSchema(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     first_name: str = None
     last_name: str = None
     privacy_settings: PrivacySettingsEnum = PrivacySettingsEnum.PUBLIC

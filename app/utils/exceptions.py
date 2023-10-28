@@ -105,6 +105,10 @@ class IncorrectPostIdException(PostsException):
     detail = "Incorrect post ID"
 
 
+class PostDoesNotExistOrYouAreNotPostAuthorException(PostsException):
+    detail = "Post does not exist or you are not post author"
+
+
 class LikesException(HTTPException):
     status_code = status.HTTP_400_BAD_REQUEST
     detail = ""
