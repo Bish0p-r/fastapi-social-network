@@ -1,9 +1,4 @@
-from fastapi import Depends
-from sqlalchemy.exc import IntegrityError
-
-from app.database import get_async_session
 from app.users.repository import UserRepository
-from app.utils.dependencies import ActiveAsyncSession
 from app.utils.exceptions import UserIdDoesNotExistException
 
 

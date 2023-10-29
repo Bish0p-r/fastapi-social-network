@@ -71,10 +71,7 @@ async def ac():
 @pytest.fixture(scope="function")
 async def authenticated_admin_ac():
     async with AsyncClient(app=fastapi_app, base_url="http://test") as ac:
-        await ac.post("/auth/login", json={
-            "email": "test_admin@test.com",
-            "password": "test_admin_password"
-        })
+        await ac.post("/auth/login", json={"email": "test_admin@test.com", "password": "test_admin_password"})
         assert ac.cookies["sn_access_token"]
         yield ac
 
@@ -82,10 +79,7 @@ async def authenticated_admin_ac():
 @pytest.fixture(scope="function")
 async def authenticated_user_ac():
     async with AsyncClient(app=fastapi_app, base_url="http://test") as ac:
-        await ac.post("/auth/login", json={
-            "email": "test_user1@test.com",
-            "password": "test_password1"
-        })
+        await ac.post("/auth/login", json={"email": "test_user1@test.com", "password": "test_password1"})
         assert ac.cookies["sn_access_token"]
         yield ac
 

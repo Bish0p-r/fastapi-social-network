@@ -2,7 +2,6 @@ from enum import Enum
 from datetime import date
 from typing import TYPE_CHECKING, List
 
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, Date, Enum as EnumField, UniqueConstraint
 from sqlalchemy.orm import relationship, mapped_column, Mapped
 
 from app.database import Base
@@ -17,9 +16,9 @@ if TYPE_CHECKING:
 
 
 class PrivacySettingsEnum(str, Enum):
-    PUBLIC = 'public'
-    FRIENDS = 'friends'
-    PRIVATE = 'private'
+    PUBLIC = "public"
+    FRIENDS = "friends"
+    PRIVATE = "private"
 
 
 class Users(Base):
@@ -37,17 +36,17 @@ class Users(Base):
     is_superuser: Mapped[bool] = mapped_column(default=False)
     is_active: Mapped[bool] = mapped_column(default=False)
 
-    incoming_requests: Mapped[List['Friendships']] = relationship(foreign_keys="[Friendships.to_user]")
-    outgoing_requests: Mapped[List['Friendships']] = relationship(foreign_keys="[Friendships.from_user]")
+    incoming_requests: Mapped[List["Friendships"]] = relationship(foreign_keys="[Friendships.to_user]")
+    outgoing_requests: Mapped[List["Friendships"]] = relationship(foreign_keys="[Friendships.from_user]")
 
-    my_blacklist: Mapped[List['Blacklist']] = relationship(foreign_keys="[Blacklist.initiator_user]")
-    im_blacklisted: Mapped[List['Blacklist']] = relationship(foreign_keys="[Blacklist.blocked_user]")
+    my_blacklist: Mapped[List["Blacklist"]] = relationship(foreign_keys="[Blacklist.initiator_user]")
+    im_blacklisted: Mapped[List["Blacklist"]] = relationship(foreign_keys="[Blacklist.blocked_user]")
 
-    posts: Mapped[List['Posts']] = relationship(back_populates='author')
+    posts: Mapped[List["Posts"]] = relationship(back_populates="author")
 
-    liked_posts: Mapped[List['Like']] = relationship(back_populates='user')
+    liked_posts: Mapped[List["Like"]] = relationship(back_populates="user")
 
-    commented_posts: Mapped[List['Comment']] = relationship(back_populates='user')
+    commented_posts: Mapped[List["Comment"]] = relationship(back_populates="user")
 
     def __str__(self):
         return f"User #{self.id}, Email: {self.email}"

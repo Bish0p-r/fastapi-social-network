@@ -19,10 +19,7 @@ class PostsRepository(BaseRepository):
     async def get_list_of_posts_with_likes(self, author_id=None, **filter_by):
         async with async_session_maker() as session:
             query = (
-                select(
-                    self.model.__table__.columns,
-                    func.count(Like.__table__.columns.id).label('likes_count')
-                )
+                select(self.model.__table__.columns, func.count(Like.__table__.columns.id).label("likes_count"))
                 .outerjoin(Like, self.model.__table__.columns.id == Like.__table__.columns.post_id)
                 .group_by(self.model.__table__.columns.id)
                 .filter_by(**filter_by)

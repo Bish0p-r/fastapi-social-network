@@ -1,7 +1,7 @@
 from datetime import date
 from typing import List
 
-from pydantic import BaseModel, EmailStr, model_validator, field_validator, ConfigDict
+from pydantic import BaseModel, EmailStr, model_validator, ConfigDict
 from app.users.models import PrivacySettingsEnum
 from app.friendships.schemas import FriendshipSchema
 from app.blacklist.schemas import BlackListSchema

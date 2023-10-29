@@ -9,10 +9,8 @@ from app.posts.services import PostsServices
 from app.posts.dependencies import GetPostsService
 from app.posts.schemas import (
     PostDataRequestSchema,
-    PostIDRequestSchema,
     MappingPostSchema,
     PostDataResponseSchema,
-    PostAuthorIDRequestSchema,
     PostUpdateRequestSchema,
 )
 
@@ -25,26 +23,21 @@ router = APIRouter(
 
 @router.get("/list")
 @cache(expire=30)
-async def get_list_of_posts(
-    post_services: PostsServices = GetPostsService
-) -> List[PostDataResponseSchema]:
+async def get_list_of_posts(post_services: PostsServices = GetPostsService) -> List[PostDataResponseSchema]:
     return await post_services.get_list_of_posts()
 
 
 @router.get("/user-posts/{author_id}")
 @cache(expire=10)
 async def get_list_of_user_posts(
-    author_id: int,
-    post_services: PostsServices = GetPostsService
+    author_id: int, post_services: PostsServices = GetPostsService
 ) -> List[PostDataResponseSchema]:
     return await post_services.get_list_of_posts(author_id=author_id)
 
 
 @router.post("/create")
 async def create_post(
-    post_data: PostDataRequestSchema,
-    user=GetCurrentUser,
-    post_services: PostsServices = GetPostsService
+    post_data: PostDataRequestSchema, user=GetCurrentUser, post_services: PostsServices = GetPostsService
 ) -> MappingPostSchema:
     return await post_services.create_post(author_id=user.id, title=post_data.title, content=post_data.content)
 
@@ -54,20 +47,13 @@ async def partial_update_post(
     post_id: int,
     post_data: PostUpdateRequestSchema,
     user=GetCurrentUser,
-    post_services: PostsServices = GetPostsService
+    post_services: PostsServices = GetPostsService,
 ) -> MappingPostSchema:
     data = post_data.model_dump(exclude_unset=True)
     return await post_services.partial_update_post(author_id=user.id, post_id=post_id, **data)
 
 
 @router.delete("/delete/{post_id}")
-async def delete_post(
-    post_id: int,
-    user=GetCurrentUser,
-    post_services: PostsServices = GetPostsService
-):
+async def delete_post(post_id: int, user=GetCurrentUser, post_services: PostsServices = GetPostsService):
     await post_services.delete_post(author_id=user.id, post_id=post_id)
-    return JSONResponse(
-        status_code=status.HTTP_200_OK,
-        content={"message": f"Post #{post_id} was deleted"}
-    )
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"message": f"Post #{post_id} was deleted"})

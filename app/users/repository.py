@@ -1,4 +1,4 @@
-from sqlalchemy import update, select, or_, func, and_
+from sqlalchemy import update, select, func
 from sqlalchemy.orm import joinedload
 
 from app.blacklist.models import Blacklist
@@ -20,17 +20,12 @@ class UserRepository(BaseRepository):
     async def find_one_or_none_with_blacklist(self, id: int):
         async with async_session_maker() as session:
             blacklist_subquery = (
-                select(func.array_agg(Blacklist.initiator_user))
-                .where(Blacklist.blocked_user == id)
-                .scalar_subquery()
+                select(func.array_agg(Blacklist.initiator_user)).where(Blacklist.blocked_user == id).scalar_subquery()
             )
 
             query = (
                 select(Users.__table__.columns, blacklist_subquery.label("im_blacklisted"))
-                .outerjoin(
-                    Blacklist,
-                    Users.id == Blacklist.blocked_user
-                )
+                .outerjoin(Blacklist, Users.id == Blacklist.blocked_user)
                 .filter(Users.id == id)
                 .group_by(Users.id)
             )
@@ -40,16 +35,18 @@ class UserRepository(BaseRepository):
 
     async def get_my_full_info(self, model_id: int):
         async with async_session_maker() as session:
-            query = select(
-                self.model
-            ).options(
-                joinedload(self.model.posts),
-                joinedload(self.model.liked_posts),
-                joinedload(self.model.commented_posts),
-                joinedload(self.model.outgoing_requests),
-                joinedload(self.model.incoming_requests),
-                joinedload(self.model.im_blacklisted),
-                joinedload(self.model.my_blacklist),
-            ).filter(self.model.id == model_id)
+            query = (
+                select(self.model)
+                .options(
+                    joinedload(self.model.posts),
+                    joinedload(self.model.liked_posts),
+                    joinedload(self.model.commented_posts),
+                    joinedload(self.model.outgoing_requests),
+                    joinedload(self.model.incoming_requests),
+                    joinedload(self.model.im_blacklisted),
+                    joinedload(self.model.my_blacklist),
+                )
+                .filter(self.model.id == model_id)
+            )
 
             return await session.scalar(query)

@@ -4,10 +4,7 @@ from pydantic import EmailStr
 from app.config import settings
 
 
-def create_email_confirmation_template(
-        email_to: EmailStr,
-        verification_url: str
-):
+def create_email_confirmation_template(email_to: EmailStr, verification_url: str):
     email = EmailMessage()
 
     email["Subject"] = "Email confirmation"
@@ -19,7 +16,7 @@ def create_email_confirmation_template(
         <h1>Email confirmation</h1>
         Follow the link to confirm your email {verification_url}
         """,
-        subtype="html"
+        subtype="html",
     )
 
     return email

@@ -13,7 +13,7 @@ class MessagesRepository(BaseRepository):
             query = select(self.model.__table__.columns).filter(
                 or_(
                     and_(self.model.from_user == from_user, self.model.to_user == to_user),
-                    and_(self.model.from_user == to_user, self.model.to_user == from_user)
+                    and_(self.model.from_user == to_user, self.model.to_user == from_user),
                 ),
             )
             result = await session.execute(query)

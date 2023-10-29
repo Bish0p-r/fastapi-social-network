@@ -1,8 +1,12 @@
-from sqlalchemy.exc import NoResultFound, IntegrityError
+from sqlalchemy.exc import NoResultFound
 
 from app.posts.repository import PostsRepository
-from app.utils.exceptions import YouAreNotPostAuthorOrIncorrectPostIDException, YouHaveBeenBlackListedException, \
-    PostDoesNotExistOrYouAreNotPostAuthorException, IncorrectPostIdException
+from app.utils.exceptions import (
+    YouAreNotPostAuthorOrIncorrectPostIDException,
+    YouHaveBeenBlackListedException,
+    PostDoesNotExistOrYouAreNotPostAuthorException,
+    IncorrectPostIdException,
+)
 
 
 class PostsServices:

@@ -31,7 +31,7 @@ async def test_not_authorized_send_friend_request(ac: AsyncClient):
         (3, 400),
         (None, 422),
         ("str", 422),
-    ]
+    ],
 )
 async def test_authorized_send_friend_request(user_id, status_code, authenticated_admin_ac: AsyncClient):
     response = await authenticated_admin_ac.post("/friendships/send-friend-request", json={"user_id": user_id})
@@ -52,13 +52,10 @@ async def test_not_authorized_accept_friend_request(ac: AsyncClient):
         (4, 2, 200),
         (None, 2, 422),
         ("str", 2, 422),
-    ]
+    ],
 )
 async def test_authorized_accept_friend_request(
-        user_id,
-        status_code,
-        count_friends,
-        authenticated_admin_ac: AsyncClient
+    user_id, status_code, count_friends, authenticated_admin_ac: AsyncClient
 ):
     response = await authenticated_admin_ac.post("/friendships/accept-friend-request", json={"user_id": user_id})
 
@@ -84,7 +81,7 @@ async def test_not_authorized_reject_friend_request(ac: AsyncClient):
         (1, 400),
         (None, 422),
         ("str", 422),
-    ]
+    ],
 )
 async def test_authorized_reject_friend_request(user_id, status_code, authenticated_admin_ac: AsyncClient):
     response = await authenticated_admin_ac.delete(f"/friendships/reject-friend-request/{user_id}")
@@ -106,7 +103,7 @@ async def test_not_authorized_cancel_sent_friend_request(ac: AsyncClient):
         (1, 400),
         (None, 422),
         ("str", 422),
-    ]
+    ],
 )
 async def test_authorized_cancel_sent_friend_request(user_id, status_code, authenticated_admin_ac: AsyncClient):
     response = await authenticated_admin_ac.delete(f"/friendships/cancel-sent-friend-request/{user_id}")
@@ -129,7 +126,7 @@ async def test_not_authorized_remove_friend(ac: AsyncClient):
         (4, 0, 200),
         (None, 0, 422),
         ("str", 0, 422),
-    ]
+    ],
 )
 async def test_authorized_remove_friend(user_id, status_code, count_friends, authenticated_admin_ac: AsyncClient):
     response = await authenticated_admin_ac.delete(f"/friendships/remove-friend/{user_id}")

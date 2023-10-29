@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, List
 
-from sqlalchemy import Column, String, Integer, ForeignKey, DateTime
+from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from app.database import Base
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 
 class Posts(Base):
-    __tablename__ = 'posts'
+    __tablename__ = "posts"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(64), nullable=True)
@@ -22,12 +22,12 @@ class Posts(Base):
     created_at: Mapped[datetime] = mapped_column(default=datetime.utcnow)
     updated_at: Mapped[datetime] = mapped_column(default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    author_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
-    author: Mapped['Users'] = relationship(back_populates='posts')
+    author_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
+    author: Mapped["Users"] = relationship(back_populates="posts")
 
-    liked_by: Mapped[List['Like']] = relationship(back_populates='post')
+    liked_by: Mapped[List["Like"]] = relationship(back_populates="post")
 
-    comments: Mapped[List['Comment']] = relationship(back_populates='post')
+    comments: Mapped[List["Comment"]] = relationship(back_populates="post")
 
     def __str__(self):
         return f"PostID: {self.id}, AuthorID: {self.author_id}"

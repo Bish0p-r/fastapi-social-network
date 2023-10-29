@@ -11,11 +11,10 @@ class BlacklistRepository(BaseRepository):
 
     async def list_blacklisted_users(self, user_id: int):
         async with async_session_maker() as session:
-            query = select(Users).join(
-                self.model,
-                self.model.blocked_user == Users.id
-            ).filter(
-                self.model.initiator_user == user_id
+            query = (
+                select(Users)
+                .join(self.model, self.model.blocked_user == Users.id)
+                .filter(self.model.initiator_user == user_id)
             )
             result = await session.execute(query)
             return result.mappings().all()

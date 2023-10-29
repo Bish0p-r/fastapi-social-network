@@ -29,9 +29,9 @@ async def test_get_list_of_users(authenticated_admin_ac: AsyncClient):
         (3, 200),
         (7, 400),
         (8, 400),
-        ('str', 422),
+        ("str", 422),
         (None, 422),
-    ]
+    ],
 )
 async def test_get_user_by_id(user_id, status_code, authenticated_admin_ac: AsyncClient):
     response = await authenticated_admin_ac.get(f"/users/{user_id}")
@@ -42,37 +42,21 @@ async def test_get_user_by_id(user_id, status_code, authenticated_admin_ac: Asyn
 @pytest.mark.parametrize(
     "data,status_code",
     [
-        ({
-            "first_name": "string",
-            "last_name": "string",
-            "privacy_settings": "public",
-            "date_of_birth": "2023-10-27",
-            "bio": "string"
-         },
-         200),
-        ({
-            "privacy_settings": "private",
-            "date_of_birth": "2012-10-27",
-            "bio": None
-         },
-         200),
-        ({
-             "privacy_settings": "wrong_enum"
-         },
-         422),
-        ({
-             "first_name": None,
-             "last_name": None,
-             "privacy_settings": None,
-             "date_of_birth": None,
-             "bio": None
-         },
-         422),
-        ({
-             "extra_field": "123"
-         },
-         422),
-    ]
+        (
+            {
+                "first_name": "string",
+                "last_name": "string",
+                "privacy_settings": "public",
+                "date_of_birth": "2023-10-27",
+                "bio": "string",
+            },
+            200,
+        ),
+        ({"privacy_settings": "private", "date_of_birth": "2012-10-27", "bio": None}, 200),
+        ({"privacy_settings": "wrong_enum"}, 422),
+        ({"first_name": None, "last_name": None, "privacy_settings": None, "date_of_birth": None, "bio": None}, 422),
+        ({"extra_field": "123"}, 422),
+    ],
 )
 async def test_partial_update_user(data, status_code, authenticated_admin_ac: AsyncClient):
     response = await authenticated_admin_ac.patch("/users/update", json=data)
@@ -82,4 +66,3 @@ async def test_partial_update_user(data, status_code, authenticated_admin_ac: As
     if status_code == 200:
         for k, v in data.items():
             assert response.json().get(k) == v
-

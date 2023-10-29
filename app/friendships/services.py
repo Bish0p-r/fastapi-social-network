@@ -1,11 +1,16 @@
-from sqlalchemy import or_, and_
 from sqlalchemy.exc import IntegrityError
 from asyncpg.exceptions import UniqueViolationError, ForeignKeyViolationError
 
 from app.friendships.repository import FriendShipRepository
-from app.utils.exceptions import FriendShipAlreadyExists, FriendShipRequestAlreadyExists, \
-    FriendShipCannotBeSentToYourself, IncorrectUserIdException, YouHaveBeenBlackListedException, \
-    FriendShipRequestDoesNotExists, FriendShipDoesNotExists
+from app.utils.exceptions import (
+    FriendShipAlreadyExists,
+    FriendShipRequestAlreadyExists,
+    FriendShipCannotBeSentToYourself,
+    IncorrectUserIdException,
+    YouHaveBeenBlackListedException,
+    FriendShipRequestDoesNotExists,
+    FriendShipDoesNotExists,
+)
 
 
 class FriendShipServices:
@@ -17,8 +22,7 @@ class FriendShipServices:
             raise FriendShipCannotBeSentToYourself
 
         existing_friendship = await self.friendship_repository.find_one_or_none(
-            from_user=to_user_id,
-            to_user=from_user_id
+            from_user=to_user_id, to_user=from_user_id
         )
 
         if existing_friendship:

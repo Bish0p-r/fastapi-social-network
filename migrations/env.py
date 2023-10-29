@@ -6,13 +6,13 @@ from sqlalchemy import pool
 from alembic import context
 
 from app.database import Base, DATABASE_URL
-from app.users.models import Users
-from app.friendships.models import Friendships
-from app.blacklist.models import Blacklist
-from app.posts.models import Posts
-from app.likes.models import Like
-from app.comments.models import Comment
-from app.chat.models import Message
+from app.users.models import Users  # noqa
+from app.friendships.models import Friendships  # noqa
+from app.blacklist.models import Blacklist  # noqa
+from app.posts.models import Posts  # noqa
+from app.likes.models import Like  # noqa
+from app.comments.models import Comment  # noqa
+from app.chat.models import Message  # noqa
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -75,9 +75,7 @@ def run_migrations_online() -> None:
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

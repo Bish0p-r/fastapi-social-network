@@ -20,45 +20,29 @@ templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/{recipient_id}")
-async def get(
-        request: Request,
-        recipient_id: int,
-        user: Users = GetCurrentUser
-):
+async def get(request: Request, recipient_id: int, user: Users = GetCurrentUser):
     return templates.TemplateResponse(
-        "chat.html",
-        {
-            "request": request,
-            "user_id": user.id,
-            "recipient_id": recipient_id
-        }
+        "chat.html", {"request": request, "user_id": user.id, "recipient_id": recipient_id}
     )
 
 
 @router.get("/list-of-my-messages-with-user/{user_id}")
 async def get_list_of_my_messages_with_user(
-        user_id: int,
-        user: Users = GetCurrentUser,
-        messages_services: MessagesServices = GetMessagesServices
+    user_id: int, user: Users = GetCurrentUser, messages_services: MessagesServices = GetMessagesServices
 ) -> List[MessageSchema]:
     return await messages_services.list_of_sent_messages(from_user=user.id, to_user=user_id)
 
 
 @router.websocket("/ws/{client_id}/{recipient_id}")
-async def websocket_chat(
-        websocket: WebSocket,
-        client_id: int,
-        recipient_id: int,
-        messages_service=GetMessagesServices
-):
+async def websocket_chat(websocket: WebSocket, client_id: int, recipient_id: int, messages_service=GetMessagesServices):
     await manager.connect(websocket, client_id)
 
     recent_messages = await messages_service.list_of_sent_messages(from_user=client_id, to_user=recipient_id)
     if recent_messages:
-        await websocket.send_text(f'Recent messages:')
+        await websocket.send_text("Recent messages:")
         for message in recent_messages:
             await websocket.send_text(f"User #{message.from_user} says: {message.content}")
-    await websocket.send_text(f'New messages:')
+    await websocket.send_text("New messages:")
 
     try:
         while True:

@@ -23,7 +23,7 @@ async def test_authorized_get_my_liked_posts(authenticated_admin_ac: AsyncClient
         (2, 1, 200),
         (3, 0, 200),
         ("str", 0, 422),
-    ]
+    ],
 )
 async def test_get_list_of_users_who_liked_the_post(post_id, count_likes, status_code, ac: AsyncClient):
     response = await ac.get(f"/likes/post-likes/{post_id}")
@@ -48,7 +48,7 @@ async def test_not_authorized_like_the_post(ac: AsyncClient):
         (2, 3, 400),
         (3, 3, 400),
         ("str", 3, 422),
-    ]
+    ],
 )
 async def test_authorized_like_the_post(post_id, count_likes, status_code, authenticated_admin_ac: AsyncClient):
     response = await authenticated_admin_ac.post(f"/likes/like/{post_id}")
@@ -75,7 +75,7 @@ async def test_not_authorized_unlike_the_post(ac: AsyncClient):
         (1, 0, 200),
         (3, 0, 400),
         ("str", 0, 422),
-    ]
+    ],
 )
 async def test_authorized_unlike_the_post(post_id, count_likes, status_code, authenticated_admin_ac: AsyncClient):
     response = await authenticated_admin_ac.delete(f"/likes/unlike/{post_id}")

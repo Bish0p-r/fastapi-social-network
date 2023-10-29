@@ -9,6 +9,3 @@ async def users_service():
 
 
 GetUsersService = Depends(users_service)
-
-
-

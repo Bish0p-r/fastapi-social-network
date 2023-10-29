@@ -1,21 +1,17 @@
 from datetime import datetime
-from functools import partial
 
 from fastapi import Depends, Request
-from sqlalchemy.ext.asyncio import AsyncSession
 from jose import JWTError, jwt
 
-from app.users.dependencies import users_service, GetUsersService
+from app.users.dependencies import GetUsersService
 from app.users.models import Users
 from app.users.services import UserServices
-from app.utils.dependencies import ActiveAsyncSession
 from app.config import settings
-from app.users.repository import UserRepository
 from app.utils.exceptions import (
     TokenExpiredException,
     TokenAbsentException,
     IncorrectTokenException,
-    UserIsNotPresentException
+    UserIsNotPresentException,
 )
 
 
@@ -27,10 +23,7 @@ def get_token(request: Request) -> str:
     return token
 
 
-async def get_current_user(
-        token: str = Depends(get_token),
-        user_services: UserServices = GetUsersService
-) -> Users:
+async def get_current_user(token: str = Depends(get_token), user_services: UserServices = GetUsersService) -> Users:
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
     except JWTError:
@@ -54,4 +47,3 @@ async def get_current_user(
 
 
 GetCurrentUser = Depends(get_current_user)
-

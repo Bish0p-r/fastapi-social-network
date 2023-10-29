@@ -1,5 +1,3 @@
-from sqladmin import Admin
-from fastapi import HTTPException
 from sqladmin.authentication import AuthenticationBackend
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
@@ -7,17 +5,12 @@ from starlette.responses import RedirectResponse
 from app.config import settings
 from app.auth.services import authenticate_user, create_access_token
 from app.auth.dependencies import get_current_user
-from app.users.dependencies import GetUsersService
 from app.users.repository import UserRepository
 from app.users.services import UserServices
 
 
 class AdminAuth(AuthenticationBackend):
-    async def login(
-            self,
-            request: Request,
-            user_services=UserServices(UserRepository)
-    ) -> bool:
+    async def login(self, request: Request, user_services=UserServices(UserRepository)) -> bool:
         form = await request.form()
         email, password = form["username"], form["password"]
         user = await authenticate_user(email, password, user_services)
@@ -32,9 +25,7 @@ class AdminAuth(AuthenticationBackend):
         return True
 
     async def authenticate(
-            self,
-            request: Request,
-            user_services=UserServices(UserRepository)
+        self, request: Request, user_services=UserServices(UserRepository)
     ) -> bool | RedirectResponse:
         token = request.session.get("token")
         if not token:

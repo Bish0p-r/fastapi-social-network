@@ -1,14 +1,10 @@
 from datetime import datetime, timedelta
 
-from fastapi import Depends
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.users.dependencies import GetUsersService
 from app.users.services import UserServices
-from app.utils.dependencies import ActiveAsyncSession
-from app.users.repository import UserRepository
 from app.config import settings
 from app.utils.exceptions import IncorrectTokenException, TokenExpiredException, UserIsNotPresentException
 
@@ -32,9 +28,9 @@ def create_access_token(data: dict, expire_in: int = 15) -> str:
 
 
 async def authenticate_user(
-        email: str,
-        password: str,
-        user_services: UserServices = GetUsersService,
+    email: str,
+    password: str,
+    user_services: UserServices = GetUsersService,
 ):
     user = await user_services.get_user_by_email(email)
 
@@ -43,10 +39,7 @@ async def authenticate_user(
     return user
 
 
-async def email_token_verification(
-        token: str,
-        user_services: UserServices = GetUsersService
-):
+async def email_token_verification(token: str, user_services: UserServices = GetUsersService):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
     except JWTError:

@@ -1,0 +1,11 @@
+[tool.ruff]
+
+line-length = 120
+
+exclude = ["migrations", "tests"]
+
+[tool.black]
+
+line-length = 120
+
+extend-exclude = "migrations"
