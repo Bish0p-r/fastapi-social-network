@@ -1,6 +1,7 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, status
+from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
 
 from app.auth.dependencies import GetCurrentUser
@@ -62,3 +63,7 @@ async def delete_comment(
         comments_services: CommentsServices = GetCommentsService,
 ):
     await comments_services.delete_comment(user_id=user.id, comment_id=comment_id)
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"message": f"Comment #{comment_id} was deleted"}
+    )

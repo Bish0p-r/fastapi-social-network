@@ -1,6 +1,7 @@
 from typing import List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, status
+from fastapi.responses import JSONResponse
 from fastapi_cache.decorator import cache
 
 from app.auth.dependencies import GetCurrentUser
@@ -66,3 +67,7 @@ async def delete_post(
     post_services: PostsServices = GetPostsService
 ):
     await post_services.delete_post(author_id=user.id, post_id=post_id)
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"message": f"Post #{post_id} was deleted"}
+    )

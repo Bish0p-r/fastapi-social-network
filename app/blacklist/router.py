@@ -43,3 +43,7 @@ async def remove_user_from_blacklist(
         blacklist_services: BlacklistServices = GetBlacklistService,
 ):
     await blacklist_services.remove_user_from_blacklist(user_id=user.id, blocked_user_id=user_id)
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"message": f"User #{user_id} was unblocked"},
+    )

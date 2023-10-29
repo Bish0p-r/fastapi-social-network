@@ -34,8 +34,7 @@ async def test_authorized_add_user_to_blacklist(
         user_id,
         count_blocked_users,
         status_code,
-        authenticated_admin_ac: AsyncClient,
-        # disable_cache
+        authenticated_admin_ac: AsyncClient
 ):
     response = await authenticated_admin_ac.post("/blacklist/block", json={"user_id": user_id})
 

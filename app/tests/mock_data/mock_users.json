@@ -20,5 +20,19 @@
     "first_name": "test_first_name2",
     "last_name": "test_last_name2",
     "is_active": true
+  },
+  {
+    "email": "test_user3@test.com",
+    "hashed_password": "$2b$12$RBe27Kelwbo.HO4tdkjNcep/tT0qs9o137gBiA87AA/Je6OdF7ux6",
+    "first_name": "test_first_name3",
+    "last_name": "test_last_name3",
+    "is_active": true
+  },
+  {
+    "email": "test_user4@test.com",
+    "hashed_password": "$2b$12$N/ouu0OlEQnBBzuf8vma/OF9NSOO5tkD4jA2AXKLZEBgRg.7Itms2",
+    "first_name": "test_first_name4",
+    "last_name": "test_last_name4",
+    "is_active": true
   }
 ]

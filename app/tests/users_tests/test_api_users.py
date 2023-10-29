@@ -18,7 +18,7 @@ async def test_get_list_of_users(authenticated_admin_ac: AsyncClient):
     response = await authenticated_admin_ac.get("/users")
 
     assert response.status_code == 200
-    assert len(response.json()) == 3
+    assert len(response.json()) == 5
 
 
 @pytest.mark.parametrize(
@@ -27,8 +27,8 @@ async def test_get_list_of_users(authenticated_admin_ac: AsyncClient):
         (1, 200),
         (2, 200),
         (3, 200),
-        (4, 400),
-        (5, 400),
+        (7, 400),
+        (8, 400),
         ('str', 422),
         (None, 422),
     ]

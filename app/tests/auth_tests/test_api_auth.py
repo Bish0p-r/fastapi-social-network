@@ -6,13 +6,13 @@ from httpx import AsyncClient
 @pytest.mark.parametrize(
     "email,password,confirm_password,first_name,last_name,users_count,status_code",
     [
-         ("test-test@test.com", "testtest", "testtest", "test_first_name", "test_last_name", 3, 201),
-         ("test-test2@test.com", "testtest", "testtest", "test_first_name", "test_last_name", 3, 201),
-         ("test-test@test.com", "testtest", "testtest", "test_first_name", "test_last_name", 3, 409),
-         ("test-test", "testtest", "testtest", "test_first_name", "test_last_name", 3, 422),
-         ("test-test@test.com", "123", "123", "test_first_name", "test_last_name", 3, 422),
-         ("test-test3@test.com", "testtest", "testtest", None, "test_last_name", 3, 422),
-         ("test-test3@test.com", "testtest", "testtest", "test_first_name", None, 3, 422),
+         ("test-test@test.com", "testtest", "testtest", "test_first_name", "test_last_name", 5, 201),
+         ("test-test2@test.com", "testtest", "testtest", "test_first_name", "test_last_name", 5, 201),
+         ("test-test@test.com", "testtest", "testtest", "test_first_name", "test_last_name", 5, 409),
+         ("test-test", "testtest", "testtest", "test_first_name", "test_last_name", 5, 422),
+         ("test-test@test.com", "123", "123", "test_first_name", "test_last_name", 5, 422),
+         ("test-test3@test.com", "testtest", "testtest", None, "test_last_name", 5, 422),
+         ("test-test3@test.com", "testtest", "testtest", "test_first_name", None, 5, 422),
     ])
 async def test_register_user(
         email,

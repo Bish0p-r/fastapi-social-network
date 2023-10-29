@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 
-@router.get("/me/friendships")
+@router.get("/my-friends")
 @cache(expire=30)
 async def get_my_friendships(
         user: Users = GetCurrentUser,
@@ -45,31 +45,40 @@ async def accept_friend_request(
     return await friendship_services.accept_friend_request(from_user_id=user_data.user_id, to_user_id=user.id)
 
 
-@router.delete("/reject-friend-request")
+@router.delete("/reject-friend-request/{user_id}")
 async def reject_friend_request(
-        user_data: FriendShipRequestSchema,
+        user_id: int,
         user: Users = GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ):
-    await friendship_services.cancel_sent_friend_request(from_user_id=user_data.user_id, to_user_id=user.id)
-    return status.HTTP_204_NO_CONTENT
+    await friendship_services.cancel_sent_friend_request(from_user_id=user_id, to_user_id=user.id)
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"message": f"Friend request from user #{user_id} was rejected"}
+    )
 
 
-@router.delete("/cancel-sent-friend-request")
+@router.delete("/cancel-sent-friend-request/{user_id}")
 async def cancel_sent_friend_request(
-        user_data: FriendShipRequestSchema,
+        user_id: int,
         user: Users = GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ):
-    await friendship_services.cancel_sent_friend_request(from_user_id=user.id, to_user_id=user_data.user_id)
-    return status.HTTP_204_NO_CONTENT
+    await friendship_services.cancel_sent_friend_request(from_user_id=user.id, to_user_id=user_id)
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"message": f"Sent friend request to user #{user_id} was cancelled"}
+    )
 
 
-@router.delete("/remove-friend")
+@router.delete("/remove-friend/{user_id}")
 async def remove_friend(
-        user_data: FriendShipRequestSchema,
+        user_id: int,
         user: Users = GetCurrentUser,
         friendship_services: FriendShipServices = GetFriendShipService
 ):
-    await friendship_services.delete_accepted_friend_request(from_user_id=user.id, to_user_id=user_data.user_id)
-    return status.HTTP_204_NO_CONTENT
+    await friendship_services.delete_accepted_friend_request(from_user_id=user.id, to_user_id=user_id)
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"message": f"Friend #{user_id} was removed from your friend list"}
+    )

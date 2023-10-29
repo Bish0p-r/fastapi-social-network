@@ -55,7 +55,10 @@ async def unlike_the_post(
         user: Users = GetCurrentUser,
         likes_services: LikesServices = GetLikesService
 ):
-    return await likes_services.delete_like(user_id=user.id, post_id=post_id)
-
+    await likes_services.delete_like(user_id=user.id, post_id=post_id)
+    return JSONResponse(
+        status_code=status.HTTP_200_OK,
+        content={"message": f"Like for post #{post_id} was removed"}
+    )
 
 

@@ -39,6 +39,7 @@ class FriendShipRepository(BaseRepository):
                     and_(self.model.to_user == user1_id, self.model.from_user == user2_id)
                 ),
                 self.model.is_accepted == True
-            )
-            await session.execute(query)
+            ).returning(self.model)
+            result = await session.execute(query)
             await session.commit()
+            return result.mappings().one_or_none()
