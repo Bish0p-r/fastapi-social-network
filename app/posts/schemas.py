@@ -10,10 +10,6 @@ class PostDataRequestSchema(BaseModel):
     content: str
 
 
-class PostIDRequestSchema(BaseModel):
-    id: int
-
-
 class PostDataResponseSchema(BaseModel):
     id: int
     author_id: int
@@ -26,10 +22,6 @@ class PostDataResponseSchema(BaseModel):
 
 class MappingPostSchema(BaseModel):
     Posts: PostDataResponseSchema
-
-
-class PostAuthorIDRequestSchema(BaseModel):
-    id: int
 
 
 class PostUpdateRequestSchema(BaseModel):
