@@ -1,12 +1,11 @@
-<details open><summary><h1>📃 Description</h1></summary>
+<h1>📃 Description</h1>
 
 This is a FastAPI-based pet project designed to create a simple social network.
 The project provides API for user registration, creating posts, comments and likes, managing friend requests, adding users to blacklist.
 
-</details>
 
 
-<details><summary><h1>🔥 Features</h1></summary>
+<h1>🔥 Features</h1>
 
 * **Posts**
 * **Comments**
@@ -18,10 +17,8 @@ The project provides API for user registration, creating posts, comments and lik
 * **Email verification**
 * **Admin interface**
 
-</details>
 
-
-<details><summary><h1>🔧 Tech stack</h1></summary>
+<h1>🔧 Tech stack</h1>
 
 * **Python 3.11**
 * **FastAPI**
@@ -34,10 +31,9 @@ The project provides API for user registration, creating posts, comments and lik
 * **Grafana + Prometheus**
 * **Docker + docker-compose**
 
-</details>
 
 
-<details><summary><h1>💿 Installation</h1></summary>
+<h1>💿 Installation</h1>
 
 1. **Clone repository.**
 ```bash
@@ -49,6 +45,3 @@ git clone https://github.com/Bish0p-r/fastapi-social-network.git
 docker-compose up
 ```
 4. The application will be launched at `http://localhost:7777/`
-
-
-</details>
