@@ -16,6 +16,6 @@ async def get_redis() -> aioredis.Redis:
         yield redis
     finally:
         await redis.close()
-        # await redis.wait_closed()
+
 
 GetRedis = Depends(get_redis)
