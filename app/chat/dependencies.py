@@ -9,3 +9,7 @@ async def messages_service():
 
 
 GetMessagesServices = Depends(messages_service)
+
+
+# async def get_manager():
+#     return ConnectionManager(Get)

@@ -20,6 +20,7 @@ from app.chat.router import router as chat_router
 
 from app.admin.views import UsersAdmin, PostsAdmin, CommentsAdmin, LikesAdmin, BlacklistsAdmin, FriendshipsAdmin
 
+from app.utils.dependencies import GetRedis
 
 app = FastAPI()
 
@@ -59,7 +60,5 @@ instrumentator.instrument(app).expose(app)
 
 @app.on_event("startup")
 def startup():
-    redis = aioredis.from_url(
-        f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}", encoding="utf8", decode_responses=True
-    )
+    redis = GetRedis
     FastAPICache.init(RedisBackend(redis), prefix="cache")

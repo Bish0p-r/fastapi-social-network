@@ -1,3 +1,4 @@
+import asyncio
 from typing import List
 
 from fastapi import APIRouter
@@ -23,6 +24,7 @@ async def get_my_profile(user=GetCurrentUser, user_services: UserServices = GetU
 @router.get("")
 @cache(expire=30)
 async def get_list_of_users(user_services: UserServices = GetUsersService) -> List[UserSchema]:
+    await asyncio.sleep(3)
     return await user_services.list_users()
 
 
