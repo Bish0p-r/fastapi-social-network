@@ -35,7 +35,7 @@ async def get_list_of_users_who_liked_the_post(
     return await likes_services.get_list_of_users(post_id=post_id)
 
 
-@router.post("/like/{post_id}")
+@router.post("/{post_id}")
 async def like_the_post(
     post_id: int,
     user: Users = GetCurrentUser,
@@ -47,7 +47,7 @@ async def like_the_post(
     return JSONResponse(status_code=status.HTTP_201_CREATED, content={"message": f"Post #{post_id} liked"})
 
 
-@router.delete("/unlike/{post_id}")
+@router.delete("/{post_id}")
 async def unlike_the_post(post_id: int, user: Users = GetCurrentUser, likes_services: LikesServices = GetLikesService):
     await likes_services.delete_like(user_id=user.id, post_id=post_id)
     return JSONResponse(status_code=status.HTTP_200_OK, content={"message": f"Like for post #{post_id} was removed"})

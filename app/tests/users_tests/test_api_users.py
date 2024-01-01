@@ -59,7 +59,7 @@ async def test_get_user_by_id(user_id, status_code, authenticated_admin_ac: Asyn
     ],
 )
 async def test_partial_update_user(data, status_code, authenticated_admin_ac: AsyncClient):
-    response = await authenticated_admin_ac.patch("/users/update", json=data)
+    response = await authenticated_admin_ac.patch("/users/me", json=data)
 
     assert response.status_code == status_code
 

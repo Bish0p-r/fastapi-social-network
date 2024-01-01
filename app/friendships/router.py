@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 
-@router.get("/my-friends")
+@router.get("")
 @cache(expire=30)
 async def get_my_friendships(
     user: Users = GetCurrentUser, friendship_services: FriendShipServices = GetFriendShipService
@@ -64,7 +64,7 @@ async def cancel_sent_friend_request(
     )
 
 
-@router.delete("/remove-friend/{user_id}")
+@router.delete("/{user_id}")
 async def remove_friend(
     user_id: int, user: Users = GetCurrentUser, friendship_services: FriendShipServices = GetFriendShipService
 ):

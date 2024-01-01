@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 
-@router.get("/list")
+@router.get("")
 @cache(expire=30)
 async def get_list_of_blacklisted_users(
     user=GetCurrentUser,
@@ -26,7 +26,7 @@ async def get_list_of_blacklisted_users(
     return await blacklist_services.get_list_of_blacklisted_users(user_id=user.id)
 
 
-@router.post("/block")
+@router.post("")
 async def add_user_to_blacklist(
     user_data: UserIDRequestSchema,
     user=GetCurrentUser,
@@ -36,7 +36,7 @@ async def add_user_to_blacklist(
     return JSONResponse(status_code=status.HTTP_201_CREATED, content={"message": "User blocked"})
 
 
-@router.delete("/unblock/{user_id}")
+@router.delete("/{user_id}")
 async def remove_user_from_blacklist(
     user_id: int,
     user=GetCurrentUser,

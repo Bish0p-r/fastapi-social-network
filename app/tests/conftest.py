@@ -36,7 +36,7 @@ async def prepare_database():
     friendships = open_mock_json("friendships")
     blacklists = open_mock_json("blacklists")
 
-    async with async_session_maker() as session:
+    async with async_session_maker() as test_session:
         add_users = insert(Users).values(users)
         add_posts = insert(Posts).values(posts)
         add_likes = insert(Like).values(likes)
@@ -44,14 +44,14 @@ async def prepare_database():
         add_friendships = insert(Friendships).values(friendships)
         add_blacklists = insert(Blacklist).values(blacklists)
 
-        await session.execute(add_users)
-        await session.execute(add_posts)
-        await session.execute(add_likes)
-        await session.execute(add_comments)
-        await session.execute(add_friendships)
-        await session.execute(add_blacklists)
+        await test_session.execute(add_users)
+        await test_session.execute(add_posts)
+        await test_session.execute(add_likes)
+        await test_session.execute(add_comments)
+        await test_session.execute(add_friendships)
+        await test_session.execute(add_blacklists)
 
-        await session.commit()
+        await test_session.commit()
 
 
 @pytest.fixture(scope="session")

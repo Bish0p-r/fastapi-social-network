@@ -32,7 +32,7 @@ async def get_user_by_id(user_id: int, user_services: UserServices = GetUsersSer
     return await user_services.get_user_by_id(user_id)
 
 
-@router.patch("/update")
+@router.patch("/me")
 async def partial_update_user(
     user_data: UserUpdateSchema, user=GetCurrentUser, user_services: UserServices = GetUsersService
 ) -> UserSchema:

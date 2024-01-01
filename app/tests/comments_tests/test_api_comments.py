@@ -35,7 +35,7 @@ async def test_get_list_of_comments_by_post_id(post_id, count_comments, status_c
 
 
 async def test_not_authorized_create_comment(ac: AsyncClient):
-    response = await ac.post("/comments/create", json={"post_id": 1, "text": "string"})
+    response = await ac.post("/comments", json={"post_id": 1, "text": "string"})
 
     assert response.status_code == 401
 
@@ -54,7 +54,7 @@ async def test_not_authorized_create_comment(ac: AsyncClient):
 async def test_authorized_create_comment(
     post_id, text, count_comments, status_code, authenticated_admin_ac: AsyncClient
 ):
-    response = await authenticated_admin_ac.post("/comments/create", json={"post_id": post_id, "text": text})
+    response = await authenticated_admin_ac.post("/comments", json={"post_id": post_id, "text": text})
 
     assert response.status_code == status_code
 
@@ -68,7 +68,7 @@ async def test_authorized_create_comment(
 
 
 async def test_not_authorized_delete_comment(ac: AsyncClient):
-    response = await ac.delete("/comments/delete/1")
+    response = await ac.delete("/comments/1")
 
     assert response.status_code == 401
 
@@ -84,7 +84,7 @@ async def test_not_authorized_delete_comment(ac: AsyncClient):
     ],
 )
 async def test_authorized_delete_comment(comment_id, status_code, count_comments, authenticated_admin_ac: AsyncClient):
-    response = await authenticated_admin_ac.delete(f"/comments/delete/{comment_id}")
+    response = await authenticated_admin_ac.delete(f"/comments/{comment_id}")
 
     assert response.status_code == status_code
 

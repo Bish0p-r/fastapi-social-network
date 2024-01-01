@@ -35,7 +35,7 @@ async def test_get_list_of_users_who_liked_the_post(post_id, count_likes, status
 
 
 async def test_not_authorized_like_the_post(ac: AsyncClient):
-    response = await ac.post("/likes/like/1")
+    response = await ac.post("/likes/1")
 
     assert response.status_code == 401
 
@@ -51,7 +51,7 @@ async def test_not_authorized_like_the_post(ac: AsyncClient):
     ],
 )
 async def test_authorized_like_the_post(post_id, count_likes, status_code, authenticated_admin_ac: AsyncClient):
-    response = await authenticated_admin_ac.post(f"/likes/like/{post_id}")
+    response = await authenticated_admin_ac.post(f"/likes/{post_id}")
 
     assert response.status_code == status_code
 
@@ -62,7 +62,7 @@ async def test_authorized_like_the_post(post_id, count_likes, status_code, authe
 
 
 async def test_not_authorized_unlike_the_post(ac: AsyncClient):
-    response = await ac.delete("/likes/unlike/1")
+    response = await ac.delete("/likes/1")
 
     assert response.status_code == 401
 
@@ -78,7 +78,7 @@ async def test_not_authorized_unlike_the_post(ac: AsyncClient):
     ],
 )
 async def test_authorized_unlike_the_post(post_id, count_likes, status_code, authenticated_admin_ac: AsyncClient):
-    response = await authenticated_admin_ac.delete(f"/likes/unlike/{post_id}")
+    response = await authenticated_admin_ac.delete(f"/likes/{post_id}")
 
     assert response.status_code == status_code
 

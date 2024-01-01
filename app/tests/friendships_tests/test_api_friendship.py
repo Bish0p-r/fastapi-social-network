@@ -4,13 +4,13 @@ from httpx import AsyncClient
 
 
 async def test_not_authorized_get_my_friendships(ac: AsyncClient):
-    response = await ac.get("/friendships/my-friends")
+    response = await ac.get("/friendships")
 
     assert response.status_code == 401
 
 
 async def test_authorized_get_my_friendships(authenticated_admin_ac: AsyncClient):
-    response = await authenticated_admin_ac.get("/friendships/my-friends")
+    response = await authenticated_admin_ac.get("/friendships")
 
     assert response.status_code == 200
     assert len(response.json()) == 1
@@ -61,7 +61,7 @@ async def test_authorized_accept_friend_request(
 
     assert response.status_code == status_code
 
-    response = await authenticated_admin_ac.get("/friendships/my-friends")
+    response = await authenticated_admin_ac.get("/friendships")
 
     assert response.status_code == 200
     assert len(response.json()) == count_friends
@@ -112,7 +112,7 @@ async def test_authorized_cancel_sent_friend_request(user_id, status_code, authe
 
 
 async def test_not_authorized_remove_friend(ac: AsyncClient):
-    response = await ac.delete("/friendships/remove-friend/3")
+    response = await ac.delete("/friendships/3")
 
     assert response.status_code == 401
 
@@ -129,11 +129,11 @@ async def test_not_authorized_remove_friend(ac: AsyncClient):
     ],
 )
 async def test_authorized_remove_friend(user_id, status_code, count_friends, authenticated_admin_ac: AsyncClient):
-    response = await authenticated_admin_ac.delete(f"/friendships/remove-friend/{user_id}")
+    response = await authenticated_admin_ac.delete(f"/friendships/{user_id}")
 
     assert response.status_code == status_code
 
-    response = await authenticated_admin_ac.get("/friendships/my-friends")
+    response = await authenticated_admin_ac.get("/friendships")
 
     assert response.status_code == 200
     assert len(response.json()) == count_friends

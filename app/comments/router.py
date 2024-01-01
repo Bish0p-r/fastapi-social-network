@@ -38,7 +38,7 @@ async def get_list_of_comments_by_post_id(
     return await comments_services.get_list_comments_by_post_id(post_id=post_id)
 
 
-@router.post("/create")
+@router.post("")
 async def create_comment(
     comment_data: CommentDataRequestSchema,
     user=GetCurrentUser,
@@ -49,7 +49,7 @@ async def create_comment(
     return await comments_services.create_comment(user_id=user.id, post_id=comment_data.post_id, text=comment_data.text)
 
 
-@router.delete("/delete/{comment_id}")
+@router.delete("/{comment_id}")
 async def delete_comment(
     comment_id: int,
     user=GetCurrentUser,
