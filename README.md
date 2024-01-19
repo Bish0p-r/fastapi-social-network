@@ -1,4 +1,4 @@
-<h1>📃 Description</h1>
+<h1>Description</h1>
 
 This is a FastAPI-based pet project designed to create a simple social network.
 The project provides API for user registration, creating posts, comments and likes, managing friend requests, adding users to blacklist.
