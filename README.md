@@ -1,11 +1,11 @@
-<h1>📃 Description</h1>
+<h1>Description</h1>
 
 This is a FastAPI-based pet project designed to create a simple social network.
 The project provides API for user registration, creating posts, comments and likes, managing friend requests, adding users to blacklist.
 
 
 
-<h1>🔥 Features</h1>
+<h1>Features</h1>
 
 * **Posts**
 * **Comments**
@@ -18,7 +18,7 @@ The project provides API for user registration, creating posts, comments and lik
 * **Admin interface**
 
 
-<h1>🔧 Tech stack</h1>
+<h1>Tech stack</h1>
 
 * **Python 3.11**
 * **FastAPI**
@@ -33,7 +33,7 @@ The project provides API for user registration, creating posts, comments and lik
 
 
 
-<h1>💿 Installation</h1>
+<h1>Installation</h1>
 
 1. **Clone repository.**
 ```bash
