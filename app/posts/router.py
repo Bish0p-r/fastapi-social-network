@@ -21,7 +21,7 @@ router = APIRouter(
 )
 
 
-@router.get("")
+@router.get("/")
 @cache(expire=30)
 async def get_list_of_posts(post_services: PostsServices = GetPostsService) -> List[PostDataResponseSchema]:
     return await post_services.get_list_of_posts()
@@ -35,7 +35,7 @@ async def get_list_of_user_posts(
     return await post_services.get_list_of_posts(author_id=author_id)
 
 
-@router.post("")
+@router.post("/")
 async def create_post(
     post_data: PostDataRequestSchema, user=GetCurrentUser, post_services: PostsServices = GetPostsService
 ) -> MappingPostSchema:

@@ -33,7 +33,6 @@ async def authenticate_user(
     user_services: UserServices = GetUsersService,
 ):
     user = await user_services.get_user_by_email(email)
-
     if not (user and verify_password(password, user.hashed_password)):
         return None
     return user
@@ -46,18 +45,15 @@ async def email_token_verification(token: str, user_services: UserServices = Get
         raise IncorrectTokenException
 
     expire: str = payload.get("exp")
-
     if not expire or int(expire) < datetime.utcnow().timestamp():
         raise TokenExpiredException
 
     user_email: str = payload.get("sub")
     token_type: str = payload.get("type")
-
     if not token_type or not user_email or token_type != "email-verif":
         raise IncorrectTokenException
 
     user = await user_services.activate_user(user_email)
-
     if not user:
         raise UserIsNotPresentException
     return user

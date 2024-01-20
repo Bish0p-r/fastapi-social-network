@@ -41,7 +41,6 @@ class WebSocketManager:
     async def create_private_room(self, client_id: int, recipient_id: int, websocket: WebSocket) -> None:
         await websocket.accept()
         self.active_connections[f"{(client_id, recipient_id)}"] = websocket
-
         await self.pubsub_client.connect()
         pubsub_subscriber = await self.pubsub_client.subscribe(client_id, recipient_id)
         asyncio.create_task(self._pubsub_data_reader(pubsub_subscriber))

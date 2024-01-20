@@ -15,7 +15,7 @@ async def test_get_my_profile(authenticated_admin_ac: AsyncClient):
 
 
 async def test_get_list_of_users(authenticated_admin_ac: AsyncClient):
-    response = await authenticated_admin_ac.get("/users")
+    response = await authenticated_admin_ac.get("/users/")
 
     assert response.status_code == 200
     assert len(response.json()) == 5

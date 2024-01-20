@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 
-@router.get("")
+@router.get("/")
 @cache(expire=30)
 async def get_my_friendships(
     user: Users = GetCurrentUser, friendship_services: FriendShipServices = GetFriendShipService

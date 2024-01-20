@@ -3,7 +3,6 @@ from fastapi import FastAPI
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from prometheus_fastapi_instrumentator import Instrumentator
-from redis import asyncio as aioredis
 from sqladmin import Admin
 
 from app.config import settings

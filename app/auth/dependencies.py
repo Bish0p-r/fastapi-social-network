@@ -17,7 +17,6 @@ from app.utils.exceptions import (
 
 def get_token(request: Request) -> str:
     token = request.cookies.get("sn_access_token")
-
     if not token:
         raise TokenAbsentException
     return token
@@ -30,17 +29,14 @@ async def get_current_user(token: str = Depends(get_token), user_services: UserS
         raise IncorrectTokenException
 
     expire: str = payload.get("exp")
-
     if not expire or int(expire) < datetime.utcnow().timestamp():
         raise TokenExpiredException
 
     user_id: str = payload.get("sub")
-
     if not user_id:
         raise UserIsNotPresentException
 
     user = await user_services.get_user_by_id_with_blacklist(int(user_id))
-
     if not user:
         raise UserIsNotPresentException
     return user

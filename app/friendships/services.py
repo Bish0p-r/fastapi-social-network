@@ -24,7 +24,6 @@ class FriendShipServices:
         existing_friendship = await self.friendship_repository.find_one_or_none(
             from_user=to_user_id, to_user=from_user_id
         )
-
         if existing_friendship:
             if existing_friendship.is_accepted:
                 raise FriendShipAlreadyExists

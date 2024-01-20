@@ -31,7 +31,7 @@ async def test_register_user(
 
     assert response.status_code == status_code
 
-    response = await ac.get("/users")
+    response = await ac.get("/users/")
 
     assert len(response.json()) == users_count
 

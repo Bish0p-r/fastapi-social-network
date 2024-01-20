@@ -8,6 +8,9 @@ from app.users.schemas import UserSchema, UserUpdateSchema, UserFullInfoSchema
 from app.users.dependencies import GetUsersService
 from app.auth.dependencies import GetCurrentUser
 
+from app.utils.dependencies import GetRedis
+from redis import asyncio as aioredis
+
 
 router = APIRouter(
     prefix="/users",
@@ -20,7 +23,7 @@ async def get_my_profile(user=GetCurrentUser, user_services: UserServices = GetU
     return await user_services.get_my_full_info(user.id)
 
 
-@router.get("")
+@router.get("/")
 @cache(expire=30)
 async def get_list_of_users(user_services: UserServices = GetUsersService) -> List[UserSchema]:
     return await user_services.list_users()
